@@ -8,7 +8,7 @@ using Views;
 
 namespace GameStates
 {
-    public class LevelLoadState : IStateWithContext<LevelLoaderStateContext>
+    public class LevelLoadState : IState
     {
         private readonly LevelSettingsProvider _levelSettingsProvider;
         private readonly GameSettings _gameSettings;
@@ -42,14 +42,12 @@ namespace GameStates
             _stateMachine = stateMachine;
         }
 
-        public async UniTask Enter(LevelLoaderStateContext context)
+        public async UniTask Enter()
         {
             _startGraphPresenter?.ClearView();
             _targetGraphPresenter?.ClearView();
-            
-            var isLevelCompleted = context.IsLevelCompleted;
 
-            var levelSettings = _levelSettingsProvider.GetLevel(shouldLoadNextLevel:isLevelCompleted);
+            var levelSettings = _levelSettingsProvider.GetCurrentLevel();
 
             var startGraph = _graphFactory.CreateStartGraph(levelSettings, _gameSettings);
             _startGraphPresenter = _graphPresenterFactory.CreateStartPresenter(startGraph);

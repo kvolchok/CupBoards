@@ -27,14 +27,14 @@ namespace Views
         {
             _gameOverOverScreen.gameObject.SetActive(false);
             
-            await _messageBus.PublishAsync(new RestartLevelButtonClickedEvent());
+            await _messageBus.PublishAsync(new ButtonClickedEvent(isNextLevelButtonClicked:false));
         }
         
         private async void OnNextLevelButtonClicked()
         {
             _gameOverOverScreen.gameObject.SetActive(false);
             
-            await _messageBus.PublishAsync(new NextLevelButtonClickedEvent());
+            await _messageBus.PublishAsync(new ButtonClickedEvent(isNextLevelButtonClicked:true));
         }
         
         public void Dispose()

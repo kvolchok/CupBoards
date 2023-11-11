@@ -1,6 +1,7 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Events;
-using Extensions;
+using Settings;
 using StateMachine;
 using UniTaskPubSub;
 
@@ -9,13 +10,15 @@ namespace GameStates
     public class FinishGameState : IState
     {
         private readonly AsyncMessageBus _messageBus;
-        
-        private StateMachine.StateMachine _stateMachine;
-        private CompositeDisposable _subscriptions;
+        private readonly UserProgressController _userProgressController;
 
-        public FinishGameState(AsyncMessageBus messageBus)
+        private StateMachine.StateMachine _stateMachine;
+        private IDisposable _subscription;
+
+        public FinishGameState(AsyncMessageBus messageBus, UserProgressController userProgressController)
         {
             _messageBus = messageBus;
+            _userProgressController = userProgressController;
         }
 
         public void Initialize(StateMachine.StateMachine stateMachine)
@@ -25,30 +28,26 @@ namespace GameStates
 
         public async UniTask Enter()
         {
-            _subscriptions = new CompositeDisposable
-            {
-                _messageBus.Subscribe<RestartLevelButtonClickedEvent>(OnRestartLevelButtonClicked),
-                _messageBus.Subscribe<NextLevelButtonClickedEvent>(OnNextLevelButtonClicked)
-            };
-            
+            _subscription = _messageBus.Subscribe<ButtonClickedEvent>(OnButtonClicked);
+
             await _messageBus.PublishAsync(new GameOverEvent());
         }
 
-        private async UniTask OnRestartLevelButtonClicked(RestartLevelButtonClickedEvent eventData)
+        private async UniTask OnButtonClicked(ButtonClickedEvent eventData)
         {
-            await _stateMachine.Enter<LevelLoadState, LevelLoaderStateContext>(
-                new LevelLoaderStateContext(false));
-        }
-        
-        private async UniTask OnNextLevelButtonClicked(NextLevelButtonClickedEvent eventData)
-        {
-            await _stateMachine.Enter<LevelLoadState, LevelLoaderStateContext>(
-                new LevelLoaderStateContext(true));
+            if (eventData.IsNextLevelButtonClicked)
+            {
+                var currentLevelIndex = _userProgressController.LoadCurrentLevelIndex();
+                currentLevelIndex++;
+                _userProgressController.SaveCurrentLevelIndex(currentLevelIndex);
+            }
+            
+            await _stateMachine.Enter<LevelLoadState>();
         }
 
         public UniTask Exit()
         {
-            _subscriptions?.Dispose();
+            _subscription?.Dispose();
             
             return UniTask.CompletedTask;
         }

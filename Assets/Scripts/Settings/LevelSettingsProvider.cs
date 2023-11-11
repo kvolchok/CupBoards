@@ -7,34 +7,33 @@ namespace Settings
     public class LevelSettingsProvider
     {
         private readonly LevelSettingsParser _parser;
+        private readonly UserProgressController _userProgressController;
 
-        private int _currentLevelIndex;
         private List<LevelSettings> _levelsSettings;
 
-        public LevelSettingsProvider(LevelSettingsParser parser)
+        public LevelSettingsProvider(LevelSettingsParser parser, UserProgressController userProgressController)
         {
             _parser = parser;
+            _userProgressController = userProgressController;
         }
 
-        public void LoadLevels()
+        public void LoadConfigs()
         {
             var files = Directory.GetFiles(GlobalConstants.LEVELS_CONFIGS_PATH);
             _levelsSettings = _parser.ParseLevelsFromTextFiles(files);
         }
 
-        public LevelSettings GetLevel(bool shouldLoadNextLevel)
+        public LevelSettings GetCurrentLevel()
         {
-            if (shouldLoadNextLevel)
+            if (!_userProgressController.HasCurrentLevelIndex())
             {
-                _currentLevelIndex = GetNextLevelIndex();
+                return _levelsSettings[0];
             }
             
-            return _levelsSettings[_currentLevelIndex];
-        }
-
-        private int GetNextLevelIndex()
-        {
-            return (_currentLevelIndex + 1) % _levelsSettings.Count;
+            var currentLevelIndex = _userProgressController.LoadCurrentLevelIndex();
+            currentLevelIndex %= _levelsSettings.Count;
+            
+            return _levelsSettings[currentLevelIndex];
         }
     }
 }

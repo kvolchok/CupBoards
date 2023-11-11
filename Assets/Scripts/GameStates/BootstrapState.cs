@@ -22,9 +22,9 @@ namespace GameStates
         
         public async UniTask Enter()
         {
-            _levelSettingsProvider.LoadLevels();
+            _levelSettingsProvider.LoadConfigs();
 
-            await _stateMachine.Enter<LevelLoadState, LevelLoaderStateContext>(new LevelLoaderStateContext(false));
+            await _stateMachine.Enter<LevelLoadState>();
         }
 
         public UniTask Exit()
