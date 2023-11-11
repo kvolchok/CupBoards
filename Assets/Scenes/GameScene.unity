@@ -1048,7 +1048,7 @@ GameObject:
   - component: {fileID: 1433940848}
   - component: {fileID: 1433940849}
   m_Layer: 5
-  m_Name: FinishGameScreen
+  m_Name: GameOverScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1363,7 +1363,7 @@ MonoBehaviour:
     - {r: 0.27450982, g: 0.78431374, b: 0.78431374, a: 1}
   _startGraphView: {fileID: 1102341913}
   _targetGraphView: {fileID: 2004766804}
-  _finishGameScreen: {fileID: 1433940849}
+  _gameOverScreen: {fileID: 1433940849}
 --- !u!1 &2004766803
 GameObject:
   m_ObjectHideFlags: 0

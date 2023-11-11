@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Views
 {
-    public class FinishGameScreen : MonoBehaviour
+    public class GameOverScreen : MonoBehaviour
     {
         [field:SerializeField]
         public Button RestartLevel { get; private set; }

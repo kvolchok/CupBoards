@@ -18,7 +18,7 @@ public class GameLifetimeScope : LifetimeScope
     [SerializeField]
     private GraphView _targetGraphView;
     [SerializeField]
-    private FinishGameScreen _finishGameScreen;
+    private GameOverScreen _gameOverScreen;
     
     protected override void Configure(IContainerBuilder builder)
     {
@@ -28,8 +28,8 @@ public class GameLifetimeScope : LifetimeScope
         
         builder.Register<AsyncMessageBus>(Lifetime.Singleton);
         
-        builder.Register<FinishScreenPresenterFactory>(Lifetime.Singleton);
-        builder.Register<FinishScreenPresenter>(Lifetime.Singleton);
+        builder.Register<GameOverPresenterFactory>(Lifetime.Singleton);
+        builder.Register<GameOverPresenter>(Lifetime.Singleton);
         
         builder.Register<LevelSettingsParser>(Lifetime.Singleton);
         builder.Register<LevelSettingsProvider>(Lifetime.Singleton);
@@ -43,11 +43,12 @@ public class GameLifetimeScope : LifetimeScope
         
         builder.RegisterInstance(_gameSettings);
         builder.RegisterInstance(_gameSettings.GraphViewPrefabs);
-        builder.RegisterInstance(_finishGameScreen);
+        builder.RegisterInstance(_gameOverScreen);
         
         var graphPresenterFactory = new GraphPresenterFactory(_startGraphView, _targetGraphView);
         builder.RegisterInstance(graphPresenterFactory);
         
+        builder.RegisterEntryPoint<UIController>();
         builder.RegisterEntryPoint<GameController>();
     }
 

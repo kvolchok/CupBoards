@@ -31,7 +31,7 @@ namespace GameStates
                 _messageBus.Subscribe<NextLevelButtonClickedEvent>(OnNextLevelButtonClicked)
             };
             
-            await _messageBus.PublishAsync(new EnterFinishGameStateEvent());
+            await _messageBus.PublishAsync(new GameOverEvent());
         }
 
         private async UniTask OnRestartLevelButtonClicked(RestartLevelButtonClickedEvent eventData)
