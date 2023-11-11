@@ -5,7 +5,7 @@ namespace Services
 {
     public class PathFinderService
     {
-        private readonly GraphManager _graphManager;
+        private readonly GraphService _graphService;
         
         private readonly Queue<NodeModel> _nodesToVisit = new();
         private readonly HashSet<NodeModel> _visitedNodes = new();
@@ -15,9 +15,9 @@ namespace Services
         private readonly List<NodeModel> _unvisitedNodes = new();
         private readonly Stack<NodeModel> _route = new();
 
-        public PathFinderService(GraphManager graphManager)
+        public PathFinderService(GraphService graphService)
         {
-            _graphManager = graphManager;
+            _graphService = graphService;
         }
 
         public IEnumerable<NodeModel> FindReachableNodes(NodeModel startNode)
@@ -52,7 +52,7 @@ namespace Services
 
         public Stack<NodeModel> FindRoute(NodeModel startNode, NodeModel targetNode)
         {
-            var startGraph = _graphManager.GetStartGraph();
+            var startGraph = _graphService.GetStartGraph();
             var nodes = startGraph.Nodes;
 
             ClearPreviousRouteCalculation(nodes);

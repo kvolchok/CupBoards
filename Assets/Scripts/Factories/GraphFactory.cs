@@ -1,26 +1,13 @@
 using System.Collections.Generic;
 using Models;
-using Settings;
 using UnityEngine;
 
 namespace Factories
 {
     public class GraphFactory
-    {
-        public GraphModel CreateStartGraph(LevelSettings levelSettings, GameSettings gameSettings)
-        {
-            return CreateGraph(levelSettings.NodesPositions, levelSettings.Connections,
-                levelSettings.StartChipsPositions, gameSettings.Colors);
-        }
-    
-        public GraphModel CreateTargetGraph(LevelSettings levelSettings, GameSettings gameSettings)
-        {
-            return CreateGraph(levelSettings.NodesPositions, levelSettings.Connections,
-                levelSettings.TargetChipsPositions, gameSettings.Colors);
-        }
-    
-        private GraphModel CreateGraph(List<Vector2Int> nodesPositions, List<Vector2Int> connections,
-            List<int> chipsNodes, Color[] colors)
+    { 
+        public GraphModel CreateGraph(List<Vector2Int> nodesPositions, List<Vector2Int> connections,
+            List<int> chipsInNodes, Color[] colors)
         {
             var nodes = new List<NodeModel>(nodesPositions.Count);
 
@@ -28,7 +15,7 @@ namespace Factories
         
             SetNeighbours(connections, nodes);
 
-            CreateChips(chipsNodes, colors, nodes);
+            CreateChips(chipsInNodes, colors, nodes);
 
             return new GraphModel(nodes);
         }
@@ -55,15 +42,15 @@ namespace Factories
             }
         }
 
-        private void CreateChips(List<int> chipsNodes, Color[] colors, List<NodeModel> nodes)
+        private void CreateChips(List<int> chipsInNodes, Color[] colors, List<NodeModel> nodes)
         {
-            for (var chipIndex = 0; chipIndex < chipsNodes.Count; chipIndex++)
+            for (var chipIndex = 0; chipIndex < chipsInNodes.Count; chipIndex++)
             {
                 var color = colors[chipIndex];
                 var chipModel = new ChipModel(color, chipIndex);
 
-                var chipsNode = chipsNodes[chipIndex] - 1;
-                var nodeModel = nodes[chipsNode];
+                var chipsInNode = chipsInNodes[chipIndex] - 1;
+                var nodeModel = nodes[chipsInNode];
                 nodeModel.SetChip(chipModel);
             }
         }

@@ -2,23 +2,12 @@ using Models;
 
 namespace Services
 {
-    public class GraphManager
+    public class GraphComparer
     {
-        private GraphModel _startGraph;
-        private GraphModel _targetGraph;
-
-        public void SaveGraphs(GraphModel startGraph, GraphModel targetGraph)
+        public bool Compare(GraphModel startGraph, GraphModel targetGraph)
         {
-            _startGraph = startGraph;
-            _targetGraph = targetGraph;
-        }
-        
-        public GraphModel GetStartGraph() => _startGraph;
-
-        public bool CompareGraphs()
-        {
-            var startGraphNodes = _startGraph.Nodes;
-            var targetGraphNodes = _targetGraph.Nodes;
+            var startGraphNodes = startGraph.Nodes;
+            var targetGraphNodes = targetGraph.Nodes;
             
             for (var i = 0; i < startGraphNodes.Count; i++)
             {

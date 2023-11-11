@@ -11,9 +11,8 @@ namespace GameStates
     {
         private readonly LevelSettingsProvider _levelSettingsProvider;
         private readonly GameSettings _gameSettings;
-        private readonly GraphFactory _graphFactory;
+        private readonly GraphService _graphService;
         private readonly GraphPresenterFactory _graphPresenterFactory;
-        private readonly GraphManager _graphManager;
 
         private StateMachine.StateMachine _stateMachine;
         private GraphPresenter _startGraphPresenter;
@@ -22,15 +21,13 @@ namespace GameStates
         public LevelLoadState(
             LevelSettingsProvider levelSettingsProvider,
             GameSettings gameSettings,
-            GraphFactory graphFactory,
-            GraphPresenterFactory graphPresenterFactory,
-            GraphManager graphManager)
+            GraphService graphService,
+            GraphPresenterFactory graphPresenterFactory)
         {
             _levelSettingsProvider = levelSettingsProvider;
             _gameSettings = gameSettings;
-            _graphFactory = graphFactory;
+            _graphService = graphService;
             _graphPresenterFactory = graphPresenterFactory;
-            _graphManager = graphManager;
         }
 
         public void Initialize(StateMachine.StateMachine stateMachine)
@@ -45,15 +42,13 @@ namespace GameStates
 
             var levelSettings = _levelSettingsProvider.GetCurrentLevel();
 
-            var startGraph = _graphFactory.CreateStartGraph(levelSettings, _gameSettings);
+            var startGraph = _graphService.CreateStartGraph(levelSettings, _gameSettings);
             _startGraphPresenter = _graphPresenterFactory.CreateStartPresenter(startGraph);
             _startGraphPresenter.Show();
         
-            var targetGraph = _graphFactory.CreateTargetGraph(levelSettings, _gameSettings);
+            var targetGraph = _graphService.CreateTargetGraph(levelSettings, _gameSettings);
             _targetGraphPresenter = _graphPresenterFactory.CreateTargetPresenter(targetGraph);
             _targetGraphPresenter.Show(isInteractable: false);
-
-            _graphManager.SaveGraphs(startGraph, targetGraph);
 
             await _stateMachine.Enter<SelectStartNodeState>();
         }

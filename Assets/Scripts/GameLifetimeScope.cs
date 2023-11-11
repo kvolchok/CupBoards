@@ -31,9 +31,10 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<LevelSettingsProvider>(Lifetime.Singleton);
         builder.Register<UserProgressController>(Lifetime.Singleton);
         
-        builder.Register<GraphPresenterFactory>(Lifetime.Singleton);
+        builder.Register<GraphService>(Lifetime.Singleton);
         builder.Register<GraphFactory>(Lifetime.Singleton);
-        builder.Register<GraphManager>(Lifetime.Singleton);
+        builder.Register<GraphComparer>(Lifetime.Singleton);
+        builder.Register<GraphPresenterFactory>(Lifetime.Singleton);
         
         builder.Register<PathFinderService>(Lifetime.Singleton);
         builder.Register<HighlightService>(Lifetime.Singleton);

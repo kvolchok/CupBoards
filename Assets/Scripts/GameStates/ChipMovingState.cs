@@ -8,18 +8,18 @@ namespace GameStates
     {
         private readonly PathFinderService _pathFinderService;
         private readonly ChipMovingService _chipMovingService;
-        private readonly GraphManager _graphManager;
+        private readonly GraphService _graphService;
 
         private StateMachine.StateMachine _stateMachine;
 
         public ChipMovingState(
             PathFinderService pathFinderService,
             ChipMovingService chipMovingService,
-            GraphManager graphManager)
+            GraphService graphService)
         {
             _pathFinderService = pathFinderService;
             _chipMovingService = chipMovingService;
-            _graphManager = graphManager;
+            _graphService = graphService;
         }
 
         public void Initialize(StateMachine.StateMachine stateMachine)
@@ -37,7 +37,7 @@ namespace GameStates
             var currentChip = startNode.Chip;
             await _chipMovingService.MoveChip(currentChip, route);
             
-            var areGraphsEqual = _graphManager.CompareGraphs();
+            var areGraphsEqual = _graphService.CompareGraphs();
             if (areGraphsEqual)
             {
                 await _stateMachine.Enter<FinishGameState>();
