@@ -36,13 +36,13 @@ namespace GameStates
 
         private async UniTask OnRestartLevelButtonClicked(RestartLevelButtonClickedEvent eventData)
         {
-            await _stateMachine.Enter<LevelLoaderState, LevelLoaderStateContext>(
+            await _stateMachine.Enter<LevelLoadState, LevelLoaderStateContext>(
                 new LevelLoaderStateContext(false));
         }
         
         private async UniTask OnNextLevelButtonClicked(NextLevelButtonClickedEvent eventData)
         {
-            await _stateMachine.Enter<LevelLoaderState, LevelLoaderStateContext>(
+            await _stateMachine.Enter<LevelLoadState, LevelLoaderStateContext>(
                 new LevelLoaderStateContext(true));
         }
 

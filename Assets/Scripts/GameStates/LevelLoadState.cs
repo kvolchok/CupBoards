@@ -8,7 +8,7 @@ using Views;
 
 namespace GameStates
 {
-    public class LevelLoaderState : IStateWithContext<LevelLoaderStateContext>
+    public class LevelLoadState : IStateWithContext<LevelLoaderStateContext>
     {
         private readonly LevelSettingsProvider _levelSettingsProvider;
         private readonly GameSettings _gameSettings;
@@ -21,7 +21,7 @@ namespace GameStates
         private GraphPresenter _startGraphPresenter;
         private GraphPresenter _targetGraphPresenter;
 
-        public LevelLoaderState(
+        public LevelLoadState(
             LevelSettingsProvider levelSettingsProvider,
             GameSettings gameSettings,
             GraphFactory graphFactory,

@@ -3,12 +3,14 @@ namespace GameStates
     public class GameStateMachine : StateMachine.StateMachine
     {
         public GameStateMachine(
-            LevelLoaderState levelLoaderState,
+            BootstrapState bootstrapState,
+            LevelLoadState levelLoadState,
             SelectStartNodeState selectFirstNodeState,
             SelectTargetNodeState selectTargetNodeState,
             ChipMovingState chipMovingState,
             FinishGameState finishGameState)
-            : base(levelLoaderState,
+            : base(bootstrapState,
+                levelLoadState,
                 selectFirstNodeState,
                 selectTargetNodeState,
                 chipMovingState,

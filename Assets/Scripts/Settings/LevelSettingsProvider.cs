@@ -1,14 +1,25 @@
+using System.Collections.Generic;
+using System.IO;
+using Utils;
+
 namespace Settings
 {
     public class LevelSettingsProvider
     {
-        private readonly GameSettings _gameSettings;
+        private readonly LevelSettingsParser _parser;
 
         private int _currentLevelIndex;
+        private List<LevelSettings> _levelsSettings;
 
-        public LevelSettingsProvider(GameSettings gameSettings)
+        public LevelSettingsProvider(LevelSettingsParser parser)
         {
-            _gameSettings = gameSettings;
+            _parser = parser;
+        }
+
+        public void LoadLevels()
+        {
+            var files = Directory.GetFiles(GlobalConstants.LEVELS_CONFIGS_PATH);
+            _levelsSettings = _parser.ParseLevelsFromTextFiles(files);
         }
 
         public LevelSettings GetLevel(bool shouldLoadNextLevel)
@@ -18,12 +29,12 @@ namespace Settings
                 _currentLevelIndex = GetNextLevelIndex();
             }
             
-            return _gameSettings.LevelsSettings[_currentLevelIndex];
+            return _levelsSettings[_currentLevelIndex];
         }
 
         private int GetNextLevelIndex()
         {
-            return (_currentLevelIndex + 1) % _gameSettings.LevelsSettings.Count;
+            return (_currentLevelIndex + 1) % _levelsSettings.Count;
         }
     }
 }

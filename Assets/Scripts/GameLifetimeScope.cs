@@ -56,7 +56,8 @@ public class GameLifetimeScope : LifetimeScope
     {
         builder.Register<GameStateMachine>(Lifetime.Singleton);
         
-        builder.Register<LevelLoaderState>(Lifetime.Singleton);
+        builder.Register<BootstrapState>(Lifetime.Singleton);
+        builder.Register<LevelLoadState>(Lifetime.Singleton);
         builder.Register<SelectStartNodeState>(Lifetime.Singleton);
         builder.Register<SelectTargetNodeState>(Lifetime.Singleton);
         builder.Register<ChipMovingState>(Lifetime.Singleton);
