@@ -931,7 +931,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1102341914}
-  - component: {fileID: 1102341913}
   m_Layer: 0
   m_Name: StartGraphView
   m_TagString: Untagged
@@ -939,18 +938,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1102341913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1102341912}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d188fd2dce7041f9a4581158618f12a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1102341914
 Transform:
   m_ObjectHideFlags: 0
@@ -1344,9 +1331,7 @@ MonoBehaviour:
   parentReference:
     TypeName: 
   autoRun: 1
-  autoInjectGameObjects:
-  - {fileID: 1102341912}
-  - {fileID: 2004766803}
+  autoInjectGameObjects: []
   _gameSettings:
     <GraphViewPrefabs>k__BackingField:
       <NodePrefab>k__BackingField: {fileID: 4555192692643429072, guid: 4898207f5e8c14c98bbb29e0949a707c, type: 3}
@@ -1361,8 +1346,8 @@ MonoBehaviour:
     - {r: 0.45882353, g: 0, b: 0.9254902, a: 1}
     - {r: 0.78431374, g: 0.27450982, b: 0.78431374, a: 1}
     - {r: 0.27450982, g: 0.78431374, b: 0.78431374, a: 1}
-  _startGraphView: {fileID: 1102341913}
-  _targetGraphView: {fileID: 2004766804}
+    <StartGraphView>k__BackingField: {fileID: 1102341912}
+    <TargetGraphView>k__BackingField: {fileID: 2004766803}
   _gameOverScreen: {fileID: 1433940849}
 --- !u!1 &2004766803
 GameObject:
@@ -1373,7 +1358,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2004766805}
-  - component: {fileID: 2004766804}
   m_Layer: 0
   m_Name: TargetGraphView
   m_TagString: Untagged
@@ -1381,18 +1365,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2004766804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2004766803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d188fd2dce7041f9a4581158618f12a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2004766805
 Transform:
   m_ObjectHideFlags: 0

@@ -3,7 +3,6 @@ using Factories;
 using Services;
 using Settings;
 using StateMachine;
-using UniTaskPubSub;
 using Views;
 
 namespace GameStates
@@ -14,7 +13,6 @@ namespace GameStates
         private readonly GameSettings _gameSettings;
         private readonly GraphFactory _graphFactory;
         private readonly GraphPresenterFactory _graphPresenterFactory;
-        private readonly AsyncMessageBus _messageBus;
         private readonly GraphManager _graphManager;
 
         private StateMachine.StateMachine _stateMachine;
@@ -26,14 +24,12 @@ namespace GameStates
             GameSettings gameSettings,
             GraphFactory graphFactory,
             GraphPresenterFactory graphPresenterFactory,
-            AsyncMessageBus messageBus,
             GraphManager graphManager)
         {
             _levelSettingsProvider = levelSettingsProvider;
             _gameSettings = gameSettings;
             _graphFactory = graphFactory;
             _graphPresenterFactory = graphPresenterFactory;
-            _messageBus = messageBus;
             _graphManager = graphManager;
         }
 
@@ -52,13 +48,10 @@ namespace GameStates
             var startGraph = _graphFactory.CreateStartGraph(levelSettings, _gameSettings);
             _startGraphPresenter = _graphPresenterFactory.CreateStartPresenter(startGraph);
             _startGraphPresenter.Show();
-            
-            _startGraphPresenter.CreateNodePresenters(_messageBus);
-            _startGraphPresenter.CreateChipPresenters();
         
             var targetGraph = _graphFactory.CreateTargetGraph(levelSettings, _gameSettings);
             _targetGraphPresenter = _graphPresenterFactory.CreateTargetPresenter(targetGraph);
-            _targetGraphPresenter.Show();
+            _targetGraphPresenter.Show(isInteractable: false);
 
             _graphManager.SaveGraphs(startGraph, targetGraph);
 

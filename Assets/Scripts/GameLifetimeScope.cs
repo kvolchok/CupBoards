@@ -14,10 +14,6 @@ public class GameLifetimeScope : LifetimeScope
     [SerializeField]
     private GameSettings _gameSettings;
     [SerializeField]
-    private GraphView _startGraphView;
-    [SerializeField]
-    private GraphView _targetGraphView;
-    [SerializeField]
     private GameOverScreen _gameOverScreen;
     
     protected override void Configure(IContainerBuilder builder)
@@ -35,6 +31,7 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<LevelSettingsProvider>(Lifetime.Singleton);
         builder.Register<UserProgressController>(Lifetime.Singleton);
         
+        builder.Register<GraphPresenterFactory>(Lifetime.Singleton);
         builder.Register<GraphFactory>(Lifetime.Singleton);
         builder.Register<GraphManager>(Lifetime.Singleton);
         
@@ -43,11 +40,7 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<ChipMovingService>(Lifetime.Singleton);
         
         builder.RegisterInstance(_gameSettings);
-        builder.RegisterInstance(_gameSettings.GraphViewPrefabs);
         builder.RegisterInstance(_gameOverScreen);
-        
-        var graphPresenterFactory = new GraphPresenterFactory(_startGraphView, _targetGraphView);
-        builder.RegisterInstance(graphPresenterFactory);
         
         builder.RegisterEntryPoint<UIController>();
         builder.RegisterEntryPoint<GameController>();
