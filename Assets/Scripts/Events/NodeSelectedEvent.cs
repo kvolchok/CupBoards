@@ -4,7 +4,7 @@ namespace Events
 {
     public struct NodeSelectedEvent
     {
-        public NodeModel NodeModel { get; private set; }
+        public NodeModel NodeModel { get; }
         
         public NodeSelectedEvent(NodeModel nodeModel)
         {

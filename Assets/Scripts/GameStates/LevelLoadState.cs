@@ -1,9 +1,9 @@
 using Cysharp.Threading.Tasks;
-using Factories;
+using Events;
 using Services;
 using Settings;
 using StateMachine;
-using Views;
+using UniTaskPubSub;
 
 namespace GameStates
 {
@@ -12,22 +12,20 @@ namespace GameStates
         private readonly LevelSettingsProvider _levelSettingsProvider;
         private readonly GameSettings _gameSettings;
         private readonly GraphService _graphService;
-        private readonly GraphPresenterFactory _graphPresenterFactory;
+        private readonly AsyncMessageBus _messageBus;
 
         private StateMachine.StateMachine _stateMachine;
-        private GraphPresenter _startGraphPresenter;
-        private GraphPresenter _targetGraphPresenter;
 
         public LevelLoadState(
             LevelSettingsProvider levelSettingsProvider,
             GameSettings gameSettings,
             GraphService graphService,
-            GraphPresenterFactory graphPresenterFactory)
+            AsyncMessageBus messageBus)
         {
             _levelSettingsProvider = levelSettingsProvider;
             _gameSettings = gameSettings;
             _graphService = graphService;
-            _graphPresenterFactory = graphPresenterFactory;
+            _messageBus = messageBus;
         }
 
         public void Initialize(StateMachine.StateMachine stateMachine)
@@ -37,18 +35,13 @@ namespace GameStates
 
         public async UniTask Enter()
         {
-            _startGraphPresenter?.ClearView();
-            _targetGraphPresenter?.ClearView();
-
             var levelSettings = _levelSettingsProvider.GetCurrentLevel();
 
             var startGraph = _graphService.CreateStartGraph(levelSettings, _gameSettings);
-            _startGraphPresenter = _graphPresenterFactory.CreateStartPresenter(startGraph);
-            _startGraphPresenter.Show();
-        
             var targetGraph = _graphService.CreateTargetGraph(levelSettings, _gameSettings);
-            _targetGraphPresenter = _graphPresenterFactory.CreateTargetPresenter(targetGraph);
-            _targetGraphPresenter.Show(isInteractable: false);
+
+            await _messageBus.PublishAsync(new ShowGraphEvent(startGraph));
+            await _messageBus.PublishAsync(new ShowGraphEvent(targetGraph, isInteractable: false));
 
             await _stateMachine.Enter<SelectStartNodeState>();
         }

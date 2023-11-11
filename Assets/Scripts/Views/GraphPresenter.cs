@@ -18,7 +18,7 @@ namespace Views
         private readonly EdgeView _edgePrefab;
 
         private readonly IObjectResolver _container;
-        private readonly AsyncMessageBus _asyncMessageBus;
+        private readonly AsyncMessageBus _messageBus;
 
         private readonly Dictionary<NodeModel, NodePresenter> _nodePresenterByModel = new();
         private readonly Dictionary<ChipModel, ChipPresenter> _chipPresenterByModel = new();
@@ -29,10 +29,12 @@ namespace Views
         private readonly List<EdgeView> _edges = new();
         private readonly HashSet<NodeView> _renderedEdgesFromView = new();
 
-        public GraphPresenter(GraphModel model,
+        public GraphPresenter(
+            GraphModel model,
             GameObject view,
             GraphViewPrefabs graphPrefabs,
-            IObjectResolver container, AsyncMessageBus asyncMessageBus)
+            IObjectResolver container,
+            AsyncMessageBus messageBus)
         {
             _model = model;
             _view = view;
@@ -42,7 +44,7 @@ namespace Views
             _edgePrefab = graphPrefabs.EdgePrefab;
 
             _container = container;
-            _asyncMessageBus = asyncMessageBus;
+            _messageBus = messageBus;
         }
 
         public void ClearView()
@@ -60,8 +62,10 @@ namespace Views
             _renderedEdgesFromView.Clear();
         }
 
-        public void Show(bool isInteractable = true)
+        public void ShowGraph(bool isInteractable)
         {
+            ClearView();
+            
             ShowNodesAndChips(_model);
 
             ShowEdges(_model);
@@ -131,7 +135,7 @@ namespace Views
         {
             foreach (var (modeModel, nodeView) in _nodeViewByModel)
             {
-                var nodePresenter = new NodePresenter(modeModel, nodeView, _asyncMessageBus);
+                var nodePresenter = new NodePresenter(modeModel, nodeView, _messageBus);
                 _nodePresenterByModel[modeModel] = nodePresenter;
             }
         }

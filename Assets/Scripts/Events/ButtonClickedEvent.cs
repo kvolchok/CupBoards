@@ -2,7 +2,7 @@ namespace Events
 {
     public struct ButtonClickedEvent
     {
-        public bool IsNextLevelButtonClicked { get; private set; }
+        public bool IsNextLevelButtonClicked { get; }
         
         public ButtonClickedEvent(bool isNextLevelButtonClicked)
         {
