@@ -10,10 +10,10 @@ namespace Views
         [SerializeField]
         private float _movingDuration;
 
-        public void Initialize(Vector3 position, ChipModel chip)
+        public void Initialize(Vector3 position, Color color)
         {
             transform.localPosition = position;
-            Sprite.color = chip.Color; 
+            Sprite.color = color; 
         }
 
         public override void ToggleHighlight(bool isActive)

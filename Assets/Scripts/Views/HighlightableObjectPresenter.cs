@@ -5,25 +5,25 @@ namespace Views
 {
     public abstract class HighlightableObjectPresenter : IDisposable
     {
-        protected readonly HighlightableObject _model;
-        protected readonly HighlightableObjectView _view;
+        public HighlightableObject Model  { get; }
+        public HighlightableObjectView View { get; }
 
         protected HighlightableObjectPresenter(HighlightableObject model, HighlightableObjectView view)
         {
-            _model = model;
-            _view = view;
+            Model = model;
+            View = view;
             
-            _model.HighlightChanged += OnHighlightChanged;
+            Model.HighlightChanged += OnHighlightChanged;
         }
         
         private void OnHighlightChanged(bool isActive)
         {
-            _view.ToggleHighlight(isActive);
+            View.ToggleHighlight(isActive);
         }
 
         public virtual void Dispose()
         {
-            _model.HighlightChanged -= OnHighlightChanged;
+            Model.HighlightChanged -= OnHighlightChanged;
         }
     }
 }

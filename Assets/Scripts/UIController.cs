@@ -34,16 +34,9 @@ public class UIController : IStartable, IDisposable
 
         _subscriptions = new CompositeDisposable
         {
-            _messageBus.Subscribe<GameOverEvent>(ShowGameOverScreen),
-            _messageBus.Subscribe<ShowGraphEvent>(ShowGraph)
+            _messageBus.Subscribe<ShowGraphEvent>(ShowGraph),
+            _messageBus.Subscribe<GameOverEvent>(ShowGameOverScreen)
         };
-    }
-
-    private UniTask ShowGameOverScreen(GameOverEvent eventData)
-    {
-        _gameOverPresenter.Show();
-
-        return UniTask.CompletedTask;
     }
     
     private UniTask ShowGraph(ShowGraphEvent eventData)
@@ -60,6 +53,13 @@ public class UIController : IStartable, IDisposable
             _targetGraphPresenter = _graphPresenterFactory.CreateTargetPresenter(eventData.GraphModel);
             _targetGraphPresenter.ShowGraph(eventData.IsInteractable);
         }
+
+        return UniTask.CompletedTask;
+    }
+    
+    private UniTask ShowGameOverScreen(GameOverEvent eventData)
+    {
+        _gameOverPresenter.Show();
 
         return UniTask.CompletedTask;
     }

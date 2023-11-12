@@ -1,56 +1,34 @@
 using System.Collections.Generic;
+using Factories;
 using Models;
-using Settings;
-using UniTaskPubSub;
 using UnityEngine;
-using VContainer;
-using VContainer.Unity;
 
 namespace Views
 {
     public class GraphPresenter
     {
         private readonly GraphModel _model;
-        private readonly GameObject _view;
-
-        private readonly NodeView _nodePrefab;
-        private readonly ChipView _chipPrefab;
-        private readonly EdgeView _edgePrefab;
-
-        private readonly IObjectResolver _container;
-        private readonly AsyncMessageBus _messageBus;
+        private readonly GameObject _root;
+        private readonly GraphElementsFactory _graphElementsFactory;
 
         private readonly Dictionary<NodeModel, NodePresenter> _nodePresenterByModel = new();
         private readonly Dictionary<ChipModel, ChipPresenter> _chipPresenterByModel = new();
 
-        private readonly Dictionary<NodeModel, NodeView> _nodeViewByModel = new();
-        private readonly Dictionary<ChipModel, ChipView> _chipViewByModel = new();
-
         private readonly List<EdgeView> _edges = new();
         private readonly HashSet<NodeView> _renderedEdgesFromView = new();
-
-        public GraphPresenter(
-            GraphModel model,
-            GameObject view,
-            GraphViewPrefabs graphPrefabs,
-            IObjectResolver container,
-            AsyncMessageBus messageBus)
+        
+        public GraphPresenter(GraphModel graphModel, GameObject graphRoot, GraphElementsFactory graphElementsFactory)
         {
-            _model = model;
-            _view = view;
-
-            _nodePrefab = graphPrefabs.NodePrefab;
-            _chipPrefab = graphPrefabs.ChipPrefab;
-            _edgePrefab = graphPrefabs.EdgePrefab;
-
-            _container = container;
-            _messageBus = messageBus;
+            _model = graphModel;
+            _root = graphRoot;
+            
+            _graphElementsFactory = graphElementsFactory;
         }
 
         public void ClearView()
         {
-            DestroyViews(_nodeViewByModel);
-            DestroyViews(_chipViewByModel);
+            DestroyViews(_nodePresenterByModel);
+            DestroyViews(_chipPresenterByModel);
 
             foreach (var edgeView in _edges)
             {
@@ -66,44 +44,39 @@ namespace Views
         {
             ClearView();
             
-            ShowNodesAndChips(_model);
+            ShowNodesAndChips(_model, isInteractable);
 
             ShowEdges(_model);
-
-            if (isInteractable)
-            {
-                CreateNodePresenters();
-                CreateChipPresenters();
-            }
         }
 
         private void DestroyViews<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
-            where TValue : HighlightableObjectView
+            where TValue : HighlightableObjectPresenter
         {
-            foreach (var (_, view) in dictionary)
+            foreach (var (_, presenter) in dictionary)
             {
-                view.Destroy();
+                presenter.View.Destroy();
             }
 
             dictionary.Clear();
         }
 
-        private void ShowNodesAndChips(GraphModel graphModel)
+        private void ShowNodesAndChips(GraphModel graphModel, bool isInteractable)
         {
             foreach (var nodeModel in graphModel.Nodes)
             {
-                var nodeView = _container.Instantiate(_nodePrefab, _view.transform);
-                nodeView.Initialize(nodeModel.Position);
-                _nodeViewByModel[nodeModel] = nodeView;
+                var nodePresenter = _graphElementsFactory.CreateNodePresenter(
+                    _root.transform, nodeModel, isInteractable);
+                _nodePresenterByModel[nodeModel] = nodePresenter;
 
-                if (nodeModel.Chip == null)
+                var chipModel = nodeModel.Chip;
+                if (chipModel == null)
                 {
                     continue;
                 }
 
-                var chipView = _container.Instantiate(_chipPrefab, _view.transform);
-                chipView.Initialize(nodeModel.Position, nodeModel.Chip);
-                _chipViewByModel[nodeModel.Chip] = chipView;
+                var chipPresenter = _graphElementsFactory.CreateChipPresenter(
+                    _root.transform, nodeModel.Position, chipModel, isInteractable);
+                _chipPresenterByModel[chipModel] = chipPresenter;
             }
         }
 
@@ -111,41 +84,25 @@ namespace Views
         {
             foreach (var nodeModel in graphModel.Nodes)
             {
-                var currentNodeView = _nodeViewByModel[nodeModel];
+                var currentNodePresenter = _nodePresenterByModel[nodeModel];
+                var currentNodeView = currentNodePresenter.View as NodeView;
 
                 foreach (var neighbourModel in nodeModel.Neighbours)
                 {
-                    var neighbourView = _nodeViewByModel[neighbourModel];
-
+                    var neighbourNodePresenter = _nodePresenterByModel[neighbourModel];
+                    var neighbourView = neighbourNodePresenter.View as NodeView;
+                    
                     if (_renderedEdgesFromView.Contains(neighbourView))
                     {
                         continue;
                     }
 
-                    var edge = _container.Instantiate(_edgePrefab, _view.transform);
-                    edge.Show(currentNodeView, neighbourView);
-                    _edges.Add(edge);
+                    var edgeView = _graphElementsFactory.CreateEdge(_root.transform);
+                    edgeView.Show(currentNodeView, neighbourView);
+                    _edges.Add(edgeView);
                 }
 
                 _renderedEdgesFromView.Add(currentNodeView);
-            }
-        }
-
-        private void CreateNodePresenters()
-        {
-            foreach (var (modeModel, nodeView) in _nodeViewByModel)
-            {
-                var nodePresenter = new NodePresenter(modeModel, nodeView, _messageBus);
-                _nodePresenterByModel[modeModel] = nodePresenter;
-            }
-        }
-
-        private void CreateChipPresenters()
-        {
-            foreach (var (chipModel, chipView) in _chipViewByModel)
-            {
-                var chipPresenter = new ChipPresenter(chipModel, chipView);
-                _chipPresenterByModel[chipModel] = chipPresenter;
             }
         }
     }

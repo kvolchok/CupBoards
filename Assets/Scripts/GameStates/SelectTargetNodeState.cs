@@ -16,7 +16,7 @@ namespace GameStates
         private readonly AsyncMessageBus _messageBus;
 
         private StateMachine.StateMachine _stateMachine;
-        private IDisposable _subscribtion;
+        private IDisposable _subscription;
         private NodeModel _startNode;
 
         public SelectTargetNodeState(
@@ -36,7 +36,7 @@ namespace GameStates
         
         public UniTask Enter(SelectTargetNodeStateContext context)
         {
-            _subscribtion = _messageBus.Subscribe<NodeSelectedEvent>(OnNodeSelected);
+            _subscription = _messageBus.Subscribe<NodeSelectedEvent>(OnNodeSelected);
             
             _startNode = context.StartNode;
             _highlightService.TurnOnHighlight(_startNode.Chip);
@@ -83,7 +83,7 @@ namespace GameStates
 
         public UniTask Exit()
         {
-            _subscribtion?.Dispose();
+            _subscription?.Dispose();
             
             return UniTask.CompletedTask;
         }

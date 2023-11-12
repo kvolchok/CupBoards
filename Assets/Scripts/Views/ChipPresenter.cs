@@ -6,21 +6,24 @@ namespace Views
 {
     public class ChipPresenter : HighlightableObjectPresenter
     {
-        public ChipPresenter(ChipModel chipModel, ChipView chipView) : base(chipModel, chipView)
+        public ChipPresenter(ChipModel chipModel, ChipView chipView, bool isInteractable) : base(chipModel, chipView)
         {
-            ((ChipModel)_model).PositionChanged += OnPositionChanged;
+            if (isInteractable)
+            {
+                ((ChipModel)Model).PositionChanged += OnPositionChanged;
+            }
         }
         
         private async UniTask OnPositionChanged(Vector3 position)
         {
-            await ((ChipView)_view).ChangePosition(position);
+            await ((ChipView)View).ChangePosition(position);
         }
 
         public override void Dispose()
         {
             base.Dispose();
             
-            ((ChipModel)_model).PositionChanged -= OnPositionChanged;
+            ((ChipModel)Model).PositionChanged -= OnPositionChanged;
         }
     }
 }

@@ -13,8 +13,8 @@ namespace Settings
         public Color[] Colors { get; private set; }
         
         [field:SerializeField]
-        public GameObject StartGraphView { get; private set; }
+        public GameObject StartGraphRoot { get; private set; }
         [field:SerializeField]
-        public GameObject TargetGraphView { get; private set; }
+        public GameObject TargetGraphRoot { get; private set; }
     }
 }
