@@ -11,7 +11,7 @@ namespace GameStates
         private readonly AsyncMessageBus _messageBus;
 
         private StateMachine.StateMachine _stateMachine;
-        private IDisposable _subscribtion;
+        private IDisposable _subscription;
 
         public SelectStartNodeState(AsyncMessageBus messageBus)
         {
@@ -25,7 +25,7 @@ namespace GameStates
 
         public UniTask Enter()
         {
-            _subscribtion = _messageBus.Subscribe<NodeSelectedEvent>(OnNodeSelected);
+            _subscription = _messageBus.Subscribe<NodeSelectedEvent>(OnNodeSelected);
 
             return UniTask.CompletedTask;
         }
@@ -47,7 +47,7 @@ namespace GameStates
 
         public UniTask Exit()
         {
-            _subscribtion?.Dispose();
+            _subscription?.Dispose();
             
             return UniTask.CompletedTask;
         }

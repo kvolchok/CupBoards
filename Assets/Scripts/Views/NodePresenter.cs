@@ -7,13 +7,18 @@ namespace Views
     public class NodePresenter : HighlightableObjectPresenter
     {
         private readonly AsyncMessageBus _messageBus;
-
+        
         public NodePresenter(NodeModel nodeModel, NodeView nodeView, AsyncMessageBus messageBus) :
             base(nodeModel, nodeView)
         {
             _messageBus = messageBus;
             
             ((NodeView)_view).NodeSelected += OnNodeSelected;
+        }
+
+        public void Highlight(bool isActive)
+        {
+            ((NodeView)_view).ToggleHighlight(isActive);
         }
 
         private async void OnNodeSelected()

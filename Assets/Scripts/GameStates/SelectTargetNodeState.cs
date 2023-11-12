@@ -16,8 +16,9 @@ namespace GameStates
         private readonly AsyncMessageBus _messageBus;
 
         private StateMachine.StateMachine _stateMachine;
-        private IDisposable _subscribtion;
+        private IDisposable _subscription;
         private NodeModel _startNode;
+        private NodeModel[] _reachableNodes;
 
         public SelectTargetNodeState(
             PathFinderService pathFinderService,
@@ -34,17 +35,19 @@ namespace GameStates
             _stateMachine = stateMachine;
         }
         
-        public UniTask Enter(SelectTargetNodeStateContext context)
+        public async UniTask Enter(SelectTargetNodeStateContext context)
         {
-            _subscribtion = _messageBus.Subscribe<NodeSelectedEvent>(OnNodeSelected);
+            _subscription = _messageBus.Subscribe<NodeSelectedEvent>(OnNodeSelected);
             
             _startNode = context.StartNode;
-            _highlightService.TurnOnHighlight(_startNode.Chip);
+            await _messageBus.PublishAsync(new ChipHighlightedEvent(_startNode.Chip, true));
+            // _highlightService.TurnOnHighlight(_startNode.Chip);
 
-            var reachableNodes = _pathFinderService.FindReachableNodes(_startNode).ToArray();
-            _highlightService.TurnOnHighlight(reachableNodes);
+            _reachableNodes = _pathFinderService.FindReachableNodes(_startNode).ToArray();
+            await _messageBus.PublishAsync(new NodesHighlightedEvent(_reachableNodes, true));
+            // _highlightService.TurnOnHighlight(_reachableNodes);
 
-            return UniTask.CompletedTask;
+            // return UniTask.CompletedTask;
         }
 
         private async UniTask OnNodeSelected(NodeSelectedEvent eventData)
@@ -54,13 +57,17 @@ namespace GameStates
 
             if (targetNode == _startNode)
             {
-                _highlightService.TurnOffHighlight();
+                await _messageBus.PublishAsync(new ChipHighlightedEvent(_startNode.Chip, false));
+                await _messageBus.PublishAsync(new NodesHighlightedEvent(_reachableNodes, false));
+                // _highlightService.TurnOffHighlight();
                 
                 await _stateMachine.Enter<SelectStartNodeState>();
             }
             else if (!isReachableNode)
             {
-                _highlightService.TurnOffHighlight();
+                await _messageBus.PublishAsync(new ChipHighlightedEvent(_startNode.Chip, false));
+                await _messageBus.PublishAsync(new NodesHighlightedEvent(_reachableNodes, false));
+                // _highlightService.TurnOffHighlight();
                 
                 if (targetNode.Chip == null)
                 {
@@ -74,7 +81,9 @@ namespace GameStates
             }
             else
             {
-                _highlightService.TurnOffHighlight();
+                await _messageBus.PublishAsync(new ChipHighlightedEvent(_startNode.Chip, false));
+                await _messageBus.PublishAsync(new NodesHighlightedEvent(_reachableNodes, false));
+                // _highlightService.TurnOffHighlight();
                 
                 await _stateMachine.Enter<ChipMovingState, ChipMovingStateContext>(
                     new ChipMovingStateContext(_startNode, targetNode));    
@@ -83,7 +92,7 @@ namespace GameStates
 
         public UniTask Exit()
         {
-            _subscribtion?.Dispose();
+            _subscription?.Dispose();
             
             return UniTask.CompletedTask;
         }

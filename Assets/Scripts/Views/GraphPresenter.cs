@@ -1,4 +1,8 @@
+using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Events;
+using Extensions;
 using Models;
 using Settings;
 using UniTaskPubSub;
@@ -8,7 +12,7 @@ using VContainer.Unity;
 
 namespace Views
 {
-    public class GraphPresenter
+    public class GraphPresenter : IDisposable
     {
         private readonly GraphModel _model;
         private readonly GameObject _view;
@@ -28,6 +32,7 @@ namespace Views
 
         private readonly List<EdgeView> _edges = new();
         private readonly HashSet<NodeView> _renderedEdgesFromView = new();
+        private readonly CompositeDisposable _subscriptions;
 
         public GraphPresenter(
             GraphModel model,
@@ -45,6 +50,12 @@ namespace Views
 
             _container = container;
             _messageBus = messageBus;
+
+            _subscriptions = new CompositeDisposable
+            {
+                _messageBus.Subscribe<ChipHighlightedEvent>(OnChipHighlighted),
+                _messageBus.Subscribe<NodesHighlightedEvent>(OnNodesHighlighted)
+            };
         }
 
         public void ClearView()
@@ -64,8 +75,6 @@ namespace Views
 
         public void ShowGraph(bool isInteractable)
         {
-            ClearView();
-            
             ShowNodesAndChips(_model);
 
             ShowEdges(_model);
@@ -75,6 +84,27 @@ namespace Views
                 CreateNodePresenters();
                 CreateChipPresenters();
             }
+        }
+        
+        private UniTask OnChipHighlighted(ChipHighlightedEvent eventData)
+        {
+            var chipModel = eventData.ChipModel;
+            var chipPresenter = _chipPresenterByModel[chipModel];
+            chipPresenter.Highlight(eventData.IsActive);
+
+            return UniTask.CompletedTask;
+        }
+        
+        private UniTask OnNodesHighlighted(NodesHighlightedEvent eventData)
+        {
+            var nodeModels = eventData.NodeModels;
+            foreach (var nodeModel in nodeModels)
+            {
+                var nodePresenter = _nodePresenterByModel[nodeModel];
+                nodePresenter.Highlight(eventData.IsActive);
+            }
+            
+            return UniTask.CompletedTask;
         }
 
         private void DestroyViews<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
@@ -147,6 +177,11 @@ namespace Views
                 var chipPresenter = new ChipPresenter(chipModel, chipView);
                 _chipPresenterByModel[chipModel] = chipPresenter;
             }
+        }
+
+        public void Dispose()
+        {
+            _subscriptions?.Dispose();
         }
     }
 }
