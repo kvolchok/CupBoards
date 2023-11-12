@@ -18,6 +18,11 @@ namespace Views
         {
             await ((ChipView)View).ChangePosition(position);
         }
+        
+        public void Highlight(bool isActive)
+        {
+            ((ChipView)_view).ToggleHighlight(isActive);
+        }
 
         public override void Dispose()
         {
