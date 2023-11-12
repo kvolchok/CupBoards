@@ -21,7 +21,7 @@ namespace Views
         
         public void Highlight(bool isActive)
         {
-            ((ChipView)_view).ToggleHighlight(isActive);
+            ((ChipView)View).ToggleHighlight(isActive);
         }
 
         public override void Dispose()
