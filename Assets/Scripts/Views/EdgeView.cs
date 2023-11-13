@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Views
 {
-    public class EdgeView : MonoBehaviour, IDestroyable
+    public class EdgeView : MonoBehaviour
     {
         [SerializeField]
         private LineRenderer _line;
@@ -14,11 +14,6 @@ namespace Views
         
             _line.SetPosition(0, from.transform.localPosition);
             _line.SetPosition(1, to.transform.localPosition);
-        }
-        
-        public void Destroy()
-        {
-            Destroy(gameObject);
         }
     }
 }

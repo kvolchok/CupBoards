@@ -6,21 +6,22 @@ namespace Views
 {
     public class NodePresenter : HighlightablePresenter
     {
+        public NodeView NodeView { get; }
+        
         private readonly NodeModel _nodeModel;
-        private readonly NodeView _nodeView;
 
         public NodePresenter(NodeModel nodeModel, NodeView nodeView, AsyncMessageBus messageBus, bool isInteractable)
             : base(nodeModel, nodeView, messageBus, isInteractable)
         {
             _nodeModel = nodeModel;
-            _nodeView = nodeView;
+            NodeView = nodeView;
             
             if (!isInteractable)
             {
                 return;
             }
             
-            _nodeView.NodeSelected += OnNodeSelected;
+            NodeView.NodeSelected += OnNodeSelected;
         }
 
         private async void OnNodeSelected()
@@ -32,7 +33,7 @@ namespace Views
         {
             base.Dispose();
             
-            _nodeView.NodeSelected -= OnNodeSelected;
+            NodeView.NodeSelected -= OnNodeSelected;
         }
     }
 }

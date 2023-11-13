@@ -32,7 +32,7 @@ namespace Views
 
             foreach (var edgeView in _edges)
             {
-                edgeView.Destroy();
+                Object.Destroy(edgeView.gameObject);
             }
 
             _edges.Clear();
@@ -52,7 +52,7 @@ namespace Views
         {
             foreach (var (_, presenter) in dictionary)
             {
-                presenter.View.Destroy();
+                Object.Destroy(presenter.View.gameObject);
                 presenter.Dispose();
             }
  
@@ -84,12 +84,12 @@ namespace Views
             foreach (var nodeModel in graphModel.Nodes)
             {
                 var currentNodePresenter = _nodePresenterByModel[nodeModel];
-                var currentNodeView = currentNodePresenter.View as NodeView;
+                var currentNodeView = currentNodePresenter.NodeView;
 
                 foreach (var neighbourModel in nodeModel.Neighbours)
                 {
                     var neighbourNodePresenter = _nodePresenterByModel[neighbourModel];
-                    var neighbourView = neighbourNodePresenter.View as NodeView;
+                    var neighbourView = neighbourNodePresenter.NodeView;
                     
                     if (_renderedEdgesFromView.Contains(neighbourView))
                     {

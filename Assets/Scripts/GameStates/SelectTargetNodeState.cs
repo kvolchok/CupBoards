@@ -43,19 +43,17 @@ namespace GameStates
 
         private async UniTask OnNodeSelected(NodeSelectedEvent eventData)
         {
+            await _messageBus.PublishAsync(new TurnOffHighlightsEvent());
+            
             var targetNode = eventData.NodeModel;
             var isReachableNode = _reachableNodes.Contains(targetNode);
 
             if (targetNode == _startNode)
             {
-                await _messageBus.PublishAsync(new TurnOffHighlightsEvent());
-                
                 await _stateMachine.Enter<SelectStartNodeState>();
             }
             else if (!isReachableNode)
             {
-                await _messageBus.PublishAsync(new TurnOffHighlightsEvent());
-                
                 if (targetNode.Chip == null)
                 {
                     await _stateMachine.Enter<SelectStartNodeState>();
@@ -68,8 +66,6 @@ namespace GameStates
             }
             else
             {
-                await _messageBus.PublishAsync(new TurnOffHighlightsEvent());
-                
                 await _stateMachine.Enter<ChipMovingState, ChipMovingStateContext>(
                     new ChipMovingStateContext(_startNode, targetNode));    
             }

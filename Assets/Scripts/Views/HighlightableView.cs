@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Views
 {
-    public abstract class HighlightableView : MonoBehaviour, IDestroyable
+    public abstract class HighlightableView : MonoBehaviour
     {
         [field:SerializeField]
         public SpriteRenderer Sprite { get; protected set; }
@@ -14,11 +14,6 @@ namespace Views
         public virtual void ToggleHighlight(bool isActive)
         {
             Sprite.color = isActive ? Highlighted : UnHighlighted;
-        }
-
-        public void Destroy()
-        {
-            Destroy(gameObject);
         }
     }
 }
