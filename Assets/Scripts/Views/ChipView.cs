@@ -1,11 +1,10 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Models;
 using UnityEngine;
 
 namespace Views
 {
-    public class ChipView : HighlightableObjectView
+    public class ChipView : HighlightableView
     {
         [SerializeField]
         private float _movingDuration;

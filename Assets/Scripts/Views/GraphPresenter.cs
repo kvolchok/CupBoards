@@ -48,7 +48,7 @@ namespace Views
         }
 
         private void DestroyViews<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
-            where TValue : HighlightableObjectPresenter
+            where TValue : HighlightablePresenter
         {
             foreach (var (_, presenter) in dictionary)
             {

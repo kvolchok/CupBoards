@@ -4,29 +4,35 @@ using UniTaskPubSub;
 
 namespace Views
 {
-    public class NodePresenter : HighlightableObjectPresenter
+    public class NodePresenter : HighlightablePresenter
     {
-        public NodePresenter(NodeModel nodeModel, NodeView nodeView, AsyncMessageBus messageBus, bool isInteractable) :
-            base(nodeModel, nodeView, messageBus, isInteractable)
+        private readonly NodeModel _nodeModel;
+        private readonly NodeView _nodeView;
+
+        public NodePresenter(NodeModel nodeModel, NodeView nodeView, AsyncMessageBus messageBus, bool isInteractable)
+            : base(nodeModel, nodeView, messageBus, isInteractable)
         {
+            _nodeModel = nodeModel;
+            _nodeView = nodeView;
+            
             if (!isInteractable)
             {
                 return;
             }
             
-            ((NodeView)View).NodeSelected += OnNodeSelected;
+            _nodeView.NodeSelected += OnNodeSelected;
         }
 
         private async void OnNodeSelected()
         {
-            await _messageBus.PublishAsync(new NodeSelectedEvent((NodeModel)_model));
+            await _messageBus.PublishAsync(new NodeSelectedEvent(_nodeModel));
         }
 
         public override void Dispose()
         {
             base.Dispose();
             
-            ((NodeView)View).NodeSelected -= OnNodeSelected;
+            _nodeView.NodeSelected -= OnNodeSelected;
         }
     }
 }

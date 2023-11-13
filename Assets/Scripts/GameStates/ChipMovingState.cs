@@ -1,24 +1,26 @@
 using Cysharp.Threading.Tasks;
+using Events;
 using Services;
 using StateMachine;
+using UniTaskPubSub;
 
 namespace GameStates
 {
     public class ChipMovingState : IStateWithContext<ChipMovingStateContext>
     {
         private readonly PathFinderService _pathFinderService;
-        private readonly ChipMovingService _chipMovingService;
+        private readonly AsyncMessageBus _messageBus;
         private readonly GraphService _graphService;
 
         private StateMachine.StateMachine _stateMachine;
 
         public ChipMovingState(
             PathFinderService pathFinderService,
-            ChipMovingService chipMovingService,
+            AsyncMessageBus messageBus,
             GraphService graphService)
         {
             _pathFinderService = pathFinderService;
-            _chipMovingService = chipMovingService;
+            _messageBus = messageBus;
             _graphService = graphService;
         }
 
@@ -35,7 +37,10 @@ namespace GameStates
             var route = _pathFinderService.FindRoute(startNode, targetNode);
 
             var currentChip = startNode.Chip;
-            await _chipMovingService.MoveChip(currentChip, route);
+            await _messageBus.PublishAsync(new MoveChipEvent(currentChip, route));
+            
+            startNode.SetChip(null);
+            targetNode.SetChip(currentChip);
             
             var areGraphsEqual = _graphService.CompareGraphs();
             if (areGraphsEqual)

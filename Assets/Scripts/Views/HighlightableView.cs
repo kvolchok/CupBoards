@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Views
 {
-    public abstract class HighlightableObjectView : MonoBehaviour, IDestroyable
+    public abstract class HighlightableView : MonoBehaviour, IDestroyable
     {
         [field:SerializeField]
         public SpriteRenderer Sprite { get; protected set; }

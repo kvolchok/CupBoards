@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Views
 {
-    public class NodeView : HighlightableObjectView
+    public class NodeView : HighlightableView
     {
         public event Action NodeSelected;
         

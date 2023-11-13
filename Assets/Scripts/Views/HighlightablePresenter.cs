@@ -8,17 +8,18 @@ using UniTaskPubSub;
 
 namespace Views
 {
-    public abstract class HighlightableObjectPresenter : IDisposable
+    public abstract class HighlightablePresenter : IDisposable
     {
-        public HighlightableObjectView View { get; }
+        public HighlightableView View { get; }
         
         protected readonly IHighlightable _model;
         protected readonly AsyncMessageBus _messageBus;
+        
         private readonly CompositeDisposable _subscriptions;
 
-        protected HighlightableObjectPresenter(
+        protected HighlightablePresenter(
             IHighlightable model,
-            HighlightableObjectView view,
+            HighlightableView view,
             AsyncMessageBus messageBus,
             bool isInteractable)
         {

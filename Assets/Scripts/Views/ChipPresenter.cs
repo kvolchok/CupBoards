@@ -1,33 +1,55 @@
+using System;
 using Cysharp.Threading.Tasks;
+using Events;
 using Models;
 using UniTaskPubSub;
-using UnityEngine;
 
 namespace Views
 {
-    public class ChipPresenter : HighlightableObjectPresenter
+    public class ChipPresenter : HighlightablePresenter
     {
-        public ChipPresenter(ChipModel chipModel, ChipView chipView, AsyncMessageBus messageBus,
-            bool isInteractable) : base(chipModel, chipView, messageBus, isInteractable)
+        private readonly ChipView _chipView;
+        private readonly IDisposable _subscription;
+
+        public ChipPresenter(ChipModel chipModel, ChipView chipView, AsyncMessageBus messageBus, bool isInteractable)
+            : base(chipModel, chipView, messageBus, isInteractable)
         {
+            _chipView = chipView;
+            
             if (!isInteractable)
             {
                 return;
             }
-            
-            ((ChipModel)_model).PositionChanged += OnPositionChanged;
+
+            _subscription = _messageBus.Subscribe<MoveChipEvent>(OnMoveChip);
         }
 
-        private async UniTask OnPositionChanged(Vector3 position)
+        private async UniTask OnMoveChip(MoveChipEvent eventData)
         {
-            await ((ChipView)View).ChangePosition(position);
+            var currentChip = eventData.CurrentChip;
+
+            if (currentChip != _model)
+            {
+                return;
+            }
+            
+            var route = eventData.Route;
+            route.Pop();
+            
+            while (route.Count > 0)
+            {
+                var currentNode = route.Pop();
+                var nextPosition = currentNode.Position;
+                
+                await _chipView.ChangePosition(nextPosition);
+            }
         }
 
         public override void Dispose()
         {
             base.Dispose();
             
-            ((ChipModel)_model).PositionChanged -= OnPositionChanged;
+            _subscription?.Dispose();
         }
     }
 }
