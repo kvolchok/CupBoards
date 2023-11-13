@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Models
 {
-    public class NodeModel : HighlightableObject
+    public class NodeModel : IHighlightable
     { 
         public IReadOnlyList<NodeModel> Neighbours => _neighbours;
     

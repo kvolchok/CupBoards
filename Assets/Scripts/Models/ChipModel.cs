@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Models
 {
-    public class ChipModel : HighlightableObject
+    public class ChipModel : IHighlightable
     {
         public event Func<Vector3, UniTask> PositionChanged; 
         

@@ -42,8 +42,6 @@ namespace Views
 
         public void ShowGraph(bool isInteractable)
         {
-            ClearView();
-            
             ShowNodesAndChips(_model, isInteractable);
 
             ShowEdges(_model);
@@ -55,8 +53,9 @@ namespace Views
             foreach (var (_, presenter) in dictionary)
             {
                 presenter.View.Destroy();
+                presenter.Dispose();
             }
-
+ 
             dictionary.Clear();
         }
 

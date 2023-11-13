@@ -12,7 +12,6 @@ namespace GameStates
     public class SelectTargetNodeState : IStateWithContext<SelectTargetNodeStateContext>
     {
         private readonly PathFinderService _pathFinderService;
-        private readonly HighlightService _highlightService;
         private readonly AsyncMessageBus _messageBus;
 
         private StateMachine.StateMachine _stateMachine;
@@ -20,13 +19,9 @@ namespace GameStates
         private NodeModel _startNode;
         private NodeModel[] _reachableNodes;
 
-        public SelectTargetNodeState(
-            PathFinderService pathFinderService,
-            HighlightService highlightService,
-            AsyncMessageBus messageBus)
+        public SelectTargetNodeState(PathFinderService pathFinderService, AsyncMessageBus messageBus)
         {
             _pathFinderService = pathFinderService;
-            _highlightService = highlightService;
             _messageBus = messageBus;
         }
 
@@ -40,34 +35,26 @@ namespace GameStates
             _subscription = _messageBus.Subscribe<NodeSelectedEvent>(OnNodeSelected);
             
             _startNode = context.StartNode;
-            await _messageBus.PublishAsync(new ChipHighlightedEvent(_startNode.Chip, true));
-            // _highlightService.TurnOnHighlight(_startNode.Chip);
+            await _messageBus.PublishAsync(new TurnOnHighlightEvent(_startNode.Chip));
 
             _reachableNodes = _pathFinderService.FindReachableNodes(_startNode).ToArray();
-            await _messageBus.PublishAsync(new NodesHighlightedEvent(_reachableNodes, true));
-            // _highlightService.TurnOnHighlight(_reachableNodes);
-
-            // return UniTask.CompletedTask;
+            await _messageBus.PublishAsync(new TurnOnHighlightEvent(_reachableNodes));
         }
 
         private async UniTask OnNodeSelected(NodeSelectedEvent eventData)
         {
             var targetNode = eventData.NodeModel;
-            var isReachableNode = targetNode.Highlighted;
+            var isReachableNode = _reachableNodes.Contains(targetNode);
 
             if (targetNode == _startNode)
             {
-                await _messageBus.PublishAsync(new ChipHighlightedEvent(_startNode.Chip, false));
-                await _messageBus.PublishAsync(new NodesHighlightedEvent(_reachableNodes, false));
-                // _highlightService.TurnOffHighlight();
+                await _messageBus.PublishAsync(new TurnOffHighlightsEvent());
                 
                 await _stateMachine.Enter<SelectStartNodeState>();
             }
             else if (!isReachableNode)
             {
-                await _messageBus.PublishAsync(new ChipHighlightedEvent(_startNode.Chip, false));
-                await _messageBus.PublishAsync(new NodesHighlightedEvent(_reachableNodes, false));
-                // _highlightService.TurnOffHighlight();
+                await _messageBus.PublishAsync(new TurnOffHighlightsEvent());
                 
                 if (targetNode.Chip == null)
                 {
@@ -81,9 +68,7 @@ namespace GameStates
             }
             else
             {
-                await _messageBus.PublishAsync(new ChipHighlightedEvent(_startNode.Chip, false));
-                await _messageBus.PublishAsync(new NodesHighlightedEvent(_reachableNodes, false));
-                // _highlightService.TurnOffHighlight();
+                await _messageBus.PublishAsync(new TurnOffHighlightsEvent());
                 
                 await _stateMachine.Enter<ChipMovingState, ChipMovingStateContext>(
                     new ChipMovingStateContext(_startNode, targetNode));    

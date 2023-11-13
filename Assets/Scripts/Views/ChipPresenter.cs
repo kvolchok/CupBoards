@@ -1,34 +1,33 @@
 using Cysharp.Threading.Tasks;
 using Models;
+using UniTaskPubSub;
 using UnityEngine;
 
 namespace Views
 {
     public class ChipPresenter : HighlightableObjectPresenter
     {
-        public ChipPresenter(ChipModel chipModel, ChipView chipView, bool isInteractable) : base(chipModel, chipView)
+        public ChipPresenter(ChipModel chipModel, ChipView chipView, AsyncMessageBus messageBus,
+            bool isInteractable) : base(chipModel, chipView, messageBus, isInteractable)
         {
-            if (isInteractable)
+            if (!isInteractable)
             {
-                ((ChipModel)Model).PositionChanged += OnPositionChanged;
+                return;
             }
+            
+            ((ChipModel)_model).PositionChanged += OnPositionChanged;
         }
-        
+
         private async UniTask OnPositionChanged(Vector3 position)
         {
             await ((ChipView)View).ChangePosition(position);
-        }
-        
-        public void Highlight(bool isActive)
-        {
-            ((ChipView)View).ToggleHighlight(isActive);
         }
 
         public override void Dispose()
         {
             base.Dispose();
             
-            ((ChipModel)Model).PositionChanged -= OnPositionChanged;
+            ((ChipModel)_model).PositionChanged -= OnPositionChanged;
         }
     }
 }

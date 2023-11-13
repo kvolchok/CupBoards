@@ -44,7 +44,7 @@ namespace Factories
             var chipView = _container.Instantiate(_chipPrefab, parent);
             chipView.Initialize(chipPosition, chipModel.Color);
             
-            return new ChipPresenter(chipModel, chipView, isInteractable);
+            return new ChipPresenter(chipModel, chipView, _messageBus, isInteractable);
         }
         
         public EdgeView CreateEdge(Transform parent)

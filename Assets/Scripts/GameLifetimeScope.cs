@@ -39,7 +39,6 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<GraphComparer>(Lifetime.Singleton);
         
         builder.Register<PathFinderService>(Lifetime.Singleton);
-        builder.Register<HighlightService>(Lifetime.Singleton);
         builder.Register<ChipMovingService>(Lifetime.Singleton);
         
         builder.RegisterInstance(_gameSettings);

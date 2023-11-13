@@ -1,29 +1,65 @@
 using System;
+using System.Linq;
+using Cysharp.Threading.Tasks;
+using Events;
+using Extensions;
 using Models;
+using UniTaskPubSub;
 
 namespace Views
 {
     public abstract class HighlightableObjectPresenter : IDisposable
     {
-        public HighlightableObject Model  { get; }
         public HighlightableObjectView View { get; }
+        
+        protected readonly IHighlightable _model;
+        protected readonly AsyncMessageBus _messageBus;
+        private readonly CompositeDisposable _subscriptions;
 
-        protected HighlightableObjectPresenter(HighlightableObject model, HighlightableObjectView view)
+        protected HighlightableObjectPresenter(
+            IHighlightable model,
+            HighlightableObjectView view,
+            AsyncMessageBus messageBus,
+            bool isInteractable)
         {
-            Model = model;
+            _model = model;
             View = view;
+            _messageBus = messageBus;
             
-            Model.HighlightChanged += OnHighlightChanged;
+            if (!isInteractable)
+            {
+                return;
+            }
+
+            _subscriptions = new CompositeDisposable
+            {
+                _messageBus.Subscribe<TurnOnHighlightEvent>(OnTurnOnHighlight),
+                _messageBus.Subscribe<TurnOffHighlightsEvent>(OnTurnOffHighlights)
+            };
         }
         
-        private void OnHighlightChanged(bool isActive)
+        private UniTask OnTurnOnHighlight(TurnOnHighlightEvent eventData)
         {
-            View.ToggleHighlight(isActive);
+            var models = eventData.Models;
+
+            if (models.Contains(_model))
+            {
+                View.ToggleHighlight(true);
+            }
+
+            return UniTask.CompletedTask;
+        }
+        
+        private UniTask OnTurnOffHighlights(TurnOffHighlightsEvent eventData)
+        {
+            View.ToggleHighlight(false);
+            
+            return UniTask.CompletedTask;
         }
 
         public virtual void Dispose()
         {
-            Model.HighlightChanged -= OnHighlightChanged;
+            _subscriptions?.Dispose();
         }
     }
 }
