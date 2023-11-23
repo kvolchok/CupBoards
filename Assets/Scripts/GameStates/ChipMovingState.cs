@@ -6,6 +6,12 @@ using UniTaskPubSub;
 
 namespace GameStates
 {
+    /// <summary>
+    /// Chip Moving State:
+    /// - Moving the chip along a given route
+    /// - Checking whether the level is passed
+    /// - If level not passed, going to select start node
+    /// </summary>
     public class ChipMovingState : IStateWithContext<ChipMovingStateContext>
     {
         private readonly PathFinderService _pathFinderService;

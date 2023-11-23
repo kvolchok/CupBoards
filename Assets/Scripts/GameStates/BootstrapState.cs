@@ -4,6 +4,10 @@ using StateMachine;
 
 namespace GameStates
 {
+    /// <summary>
+    /// Bootstrap State:
+    /// - Prepare and load all level configs
+    /// </summary>
     public class BootstrapState : IState
     {
         private readonly ILevelSettingsProvider _levelSettingsProvider;

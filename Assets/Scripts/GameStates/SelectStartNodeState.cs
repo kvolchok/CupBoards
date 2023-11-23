@@ -6,6 +6,11 @@ using UniTaskPubSub;
 
 namespace GameStates
 {
+    /// <summary>
+    /// Select Start Node State:
+    /// - Select start node that it's chip will be moved
+    /// - If there is no chip in node, select another node
+    /// </summary>
     public class SelectStartNodeState : IState
     {
         private readonly IAsyncSubscriber _subscriber;

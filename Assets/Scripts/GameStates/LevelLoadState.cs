@@ -7,6 +7,11 @@ using UniTaskPubSub;
 
 namespace GameStates
 {
+    /// <summary>
+    /// Level Load State:
+    /// - Load current level
+    /// - Create start and target graphs
+    /// </summary>
     public class LevelLoadState : IState
     {
         private readonly ILevelSettingsProvider _levelSettingsProvider;

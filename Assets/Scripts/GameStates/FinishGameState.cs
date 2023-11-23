@@ -7,6 +7,11 @@ using UniTaskPubSub;
 
 namespace GameStates
 {
+    /// <summary>
+    /// Finish Game State:
+    /// - Show GameOver Screen
+    /// - Select of reloading the level or loading the next one
+    /// </summary>
     public class FinishGameState : IState
     {
         private readonly AsyncMessageBus _messageBus;

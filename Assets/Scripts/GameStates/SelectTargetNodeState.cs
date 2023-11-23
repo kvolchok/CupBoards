@@ -9,6 +9,12 @@ using UniTaskPubSub;
 
 namespace GameStates
 {
+    /// <summary>
+    /// Select Target Node State:
+    /// - Select target node where start chip will be moved
+    /// - If there is no chip in target node or start chip is target chip, select another start node
+    /// - If target node is unreachable, select another target node
+    /// </summary>
     public class SelectTargetNodeState : IStateWithContext<SelectTargetNodeStateContext>
     {
         private readonly PathFinderService _pathFinderService;
