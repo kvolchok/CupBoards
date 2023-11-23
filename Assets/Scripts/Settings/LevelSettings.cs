@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Settings
 {
-    public class LevelSettings
+    public class LevelSettings : ILevelSettings
     {
-        public List<Vector2Int> NodesPositions { get; private set; }
-        public List<Vector2Int> Connections { get; private set; }
-        public List<int> StartChipsPositions { get; private set; }
-        public List<int> TargetChipsPositions { get; private set; }
+        public List<Vector2Int> NodesPositions { get; }
+        public List<Vector2Int> Connections { get; }
+        public List<int> StartChipsPositions { get; }
+        public List<int> TargetChipsPositions { get; }
     
         public LevelSettings(
             List<Vector2Int> nodesPositions,

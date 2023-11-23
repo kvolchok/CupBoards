@@ -9,9 +9,9 @@ namespace Utils
 {
     public class LevelSettingsParser
     {
-        public List<LevelSettings> ParseLevelsFromTextFiles(string[] files)
+        public List<ILevelSettings> ParseLevelsFromTextFiles(string[] files)
         {
-            var levelsSettings = new List<LevelSettings>();
+            var levelsSettings = new List<ILevelSettings>();
 
             foreach (var file in files)
             {
@@ -25,7 +25,7 @@ namespace Utils
             return levelsSettings;
         }
 
-        private LevelSettings ParseLevel(string levelConfig)
+        private ILevelSettings ParseLevel(string levelConfig)
         {
             using var streamReader = new StreamReader(levelConfig);
 

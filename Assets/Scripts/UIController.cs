@@ -11,7 +11,7 @@ public class UIController : IStartable, IDisposable
 {
     private readonly GraphPresenterFactory _graphPresenterFactory;
     private readonly GameOverPresenterFactory _gameOverPresenterFactory;
-    private readonly AsyncMessageBus _messageBus;
+    private readonly IAsyncSubscriber _subscriber;
 
     private GraphPresenter _startGraphPresenter;
     private GraphPresenter _targetGraphPresenter;
@@ -21,19 +21,19 @@ public class UIController : IStartable, IDisposable
     public UIController(
         GraphPresenterFactory graphPresenterFactory,
         GameOverPresenterFactory gameOverPresenterFactory,
-        AsyncMessageBus messageBus)
+        IAsyncSubscriber subscriber)
     {
         _graphPresenterFactory = graphPresenterFactory;
         _gameOverPresenterFactory = gameOverPresenterFactory;
-        _messageBus = messageBus;
+        _subscriber = subscriber;
     }
 
     public void Start()
     {
         _subscriptions = new CompositeDisposable
         {
-            _messageBus.Subscribe<ShowGraphEvent>(ShowGraph),
-            _messageBus.Subscribe<GameOverEvent>(ShowGameOverScreen)
+            _subscriber.Subscribe<ShowGraphEvent>(ShowGraph),
+            _subscriber.Subscribe<GameOverEvent>(ShowGameOverScreen)
         };
         
         _gameOverPresenter = _gameOverPresenterFactory.Create();

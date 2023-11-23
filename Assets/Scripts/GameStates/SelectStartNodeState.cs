@@ -8,14 +8,14 @@ namespace GameStates
 {
     public class SelectStartNodeState : IState
     {
-        private readonly AsyncMessageBus _messageBus;
+        private readonly IAsyncSubscriber _subscriber;
 
         private StateMachine.StateMachine _stateMachine;
         private IDisposable _subscription;
 
-        public SelectStartNodeState(AsyncMessageBus messageBus)
+        public SelectStartNodeState(IAsyncSubscriber subscriber)
         {
-            _messageBus = messageBus;
+            _subscriber = subscriber;
         }
 
         public void Initialize(StateMachine.StateMachine stateMachine)
@@ -25,7 +25,7 @@ namespace GameStates
 
         public UniTask Enter()
         {
-            _subscription = _messageBus.Subscribe<NodeSelectedEvent>(OnNodeSelected);
+            _subscription = _subscriber.Subscribe<NodeSelectedEvent>(OnNodeSelected);
 
             return UniTask.CompletedTask;
         }

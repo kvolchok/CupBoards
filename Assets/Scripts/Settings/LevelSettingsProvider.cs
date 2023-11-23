@@ -4,12 +4,12 @@ using Utils;
 
 namespace Settings
 {
-    public class LevelSettingsProvider
+    public class LevelSettingsProvider : ILevelSettingsProvider
     {
+        public List<ILevelSettings> LevelsSettings { get; private set; }
+        
         private readonly LevelSettingsParser _parser;
         private readonly UserProgressController _userProgressController;
-
-        private List<LevelSettings> _levelsSettings;
 
         public LevelSettingsProvider(LevelSettingsParser parser, UserProgressController userProgressController)
         {
@@ -20,20 +20,20 @@ namespace Settings
         public void LoadConfigs()
         {
             var files = Directory.GetFiles(GlobalConstants.LEVELS_CONFIGS_PATH);
-            _levelsSettings = _parser.ParseLevelsFromTextFiles(files);
+            LevelsSettings = _parser.ParseLevelsFromTextFiles(files);
         }
 
-        public LevelSettings GetCurrentLevel()
+        public ILevelSettings GetCurrentLevel()
         {
             if (!_userProgressController.HasCurrentLevelIndex())
             {
-                return _levelsSettings[0];
+                return LevelsSettings[0];
             }
             
             var currentLevelIndex = _userProgressController.LoadCurrentLevelIndex();
-            currentLevelIndex %= _levelsSettings.Count;
+            currentLevelIndex %= LevelsSettings.Count;
             
-            return _levelsSettings[currentLevelIndex];
+            return LevelsSettings[currentLevelIndex];
         }
     }
 }

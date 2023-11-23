@@ -9,19 +9,19 @@ namespace GameStates
     public class ChipMovingState : IStateWithContext<ChipMovingStateContext>
     {
         private readonly PathFinderService _pathFinderService;
-        private readonly AsyncMessageBus _messageBus;
         private readonly GraphService _graphService;
+        private readonly IAsyncPublisher _publisher;
 
         private StateMachine.StateMachine _stateMachine;
 
         public ChipMovingState(
             PathFinderService pathFinderService,
-            AsyncMessageBus messageBus,
-            GraphService graphService)
+            GraphService graphService,
+            IAsyncPublisher publisher)
         {
             _pathFinderService = pathFinderService;
-            _messageBus = messageBus;
             _graphService = graphService;
+            _publisher = publisher;
         }
 
         public void Initialize(StateMachine.StateMachine stateMachine)
@@ -37,7 +37,7 @@ namespace GameStates
             var route = _pathFinderService.FindRoute(startNode, targetNode);
 
             var currentChip = startNode.Chip;
-            await _messageBus.PublishAsync(new MoveChipEvent(currentChip, route));
+            await _publisher.PublishAsync(new MoveChipEvent(currentChip, route));
             
             startNode.SetChip(null);
             targetNode.SetChip(currentChip);

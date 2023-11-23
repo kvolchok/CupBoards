@@ -9,23 +9,23 @@ namespace GameStates
 {
     public class LevelLoadState : IState
     {
-        private readonly LevelSettingsProvider _levelSettingsProvider;
+        private readonly ILevelSettingsProvider _levelSettingsProvider;
         private readonly GameSettings _gameSettings;
         private readonly GraphService _graphService;
-        private readonly AsyncMessageBus _messageBus;
+        private readonly IAsyncPublisher _publisher;
 
         private StateMachine.StateMachine _stateMachine;
 
         public LevelLoadState(
-            LevelSettingsProvider levelSettingsProvider,
+            ILevelSettingsProvider levelSettingsProvider,
             GameSettings gameSettings,
             GraphService graphService,
-            AsyncMessageBus messageBus)
+            IAsyncPublisher publisher)
         {
             _levelSettingsProvider = levelSettingsProvider;
             _gameSettings = gameSettings;
             _graphService = graphService;
-            _messageBus = messageBus;
+            _publisher = publisher;
         }
 
         public void Initialize(StateMachine.StateMachine stateMachine)
@@ -40,8 +40,8 @@ namespace GameStates
             var startGraph = _graphService.CreateStartGraph(levelSettings, _gameSettings);
             var targetGraph = _graphService.CreateTargetGraph(levelSettings, _gameSettings);
 
-            await _messageBus.PublishAsync(new ShowGraphEvent(startGraph));
-            await _messageBus.PublishAsync(new ShowGraphEvent(targetGraph, isInteractable: false));
+            await _publisher.PublishAsync(new ShowGraphEvent(startGraph));
+            await _publisher.PublishAsync(new ShowGraphEvent(targetGraph, isInteractable: false));
 
             await _stateMachine.Enter<SelectStartNodeState>();
         }

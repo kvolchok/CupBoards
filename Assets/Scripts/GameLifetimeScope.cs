@@ -22,13 +22,15 @@ public class GameLifetimeScope : LifetimeScope
 
         RegisterGameStateMachine(builder);
         
-        builder.Register<AsyncMessageBus>(Lifetime.Singleton);
+        builder.Register<AsyncMessageBus>(Lifetime.Singleton)
+            .AsImplementedInterfaces()
+            .AsSelf();
         
         builder.Register<GameOverPresenterFactory>(Lifetime.Singleton);
         builder.Register<GameOverPresenter>(Lifetime.Singleton);
         
         builder.Register<LevelSettingsParser>(Lifetime.Singleton);
-        builder.Register<LevelSettingsProvider>(Lifetime.Singleton);
+        builder.Register<LevelSettingsProvider>(Lifetime.Singleton).AsImplementedInterfaces();
         builder.Register<UserProgressController>(Lifetime.Singleton);
         
         builder.Register<GraphPresenterFactory>(Lifetime.Singleton);

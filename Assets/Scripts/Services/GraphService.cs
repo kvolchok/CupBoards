@@ -18,7 +18,7 @@ namespace Services
             _graphComparer = graphComparer;
         }
 
-        public GraphModel CreateStartGraph(LevelSettings levelSettings, GameSettings gameSettings)
+        public GraphModel CreateStartGraph(ILevelSettings levelSettings, GameSettings gameSettings)
         {
             _startGraph = _graphFactory.CreateGraph(
                 levelSettings.NodesPositions,
@@ -29,7 +29,7 @@ namespace Services
             return _startGraph;
         }
         
-        public GraphModel CreateTargetGraph(LevelSettings levelSettings, GameSettings gameSettings)
+        public GraphModel CreateTargetGraph(ILevelSettings levelSettings, GameSettings gameSettings)
         {
             _targetGraph = _graphFactory.CreateGraph(
                 levelSettings.NodesPositions,

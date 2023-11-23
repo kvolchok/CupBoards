@@ -1,7 +1,8 @@
+using System;
 using GameStates;
 using VContainer.Unity;
 
-public class GameController : IStartable
+public class GameController : IStartable, IDisposable
 {
     private readonly GameStateMachine _stateMachine;
 
@@ -13,5 +14,10 @@ public class GameController : IStartable
     public async void Start()
     {
         await _stateMachine.Enter<BootstrapState>();
+    }
+
+    public void Dispose()
+    {
+        _stateMachine?.Dispose();
     }
 }

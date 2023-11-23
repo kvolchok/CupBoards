@@ -6,11 +6,11 @@ namespace GameStates
 {
     public class BootstrapState : IState
     {
-        private readonly LevelSettingsProvider _levelSettingsProvider;
+        private readonly ILevelSettingsProvider _levelSettingsProvider;
         
         private StateMachine.StateMachine _stateMachine;
 
-        public BootstrapState(LevelSettingsProvider levelSettingsProvider)
+        public BootstrapState(ILevelSettingsProvider levelSettingsProvider)
         {
             _levelSettingsProvider = levelSettingsProvider;
         }
