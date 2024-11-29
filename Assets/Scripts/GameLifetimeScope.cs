@@ -42,7 +42,7 @@ public class GameLifetimeScope : LifetimeScope
         
         builder.Register<PathFinderService>(Lifetime.Singleton);
         
-        builder.RegisterInstance(_gameSettings);
+        builder.RegisterInstance(_gameSettings).AsImplementedInterfaces();
         builder.RegisterInstance(_gameSettings.GraphViewPrefabs);
         builder.RegisterInstance(_gameOverScreen);
         

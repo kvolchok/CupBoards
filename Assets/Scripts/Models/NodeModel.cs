@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Models
     { 
         public IReadOnlyList<NodeModel> Neighbours => _neighbours;
     
-        public Vector3 Position { get; private set; }
+        public Vector3 Position { get; }
         public ChipModel Chip { get; private set; }
         
         private readonly List<NodeModel> _neighbours = new();
@@ -21,10 +22,29 @@ namespace Models
         {
             Chip = chip;
         }
-    
+
         public void AddNeighbour(NodeModel node)
         {
             _neighbours.Add(node);
         }
+
+        #region Equality members
+
+        public override bool Equals(object obj)
+        {
+            return obj is NodeModel nodeModel && Equals(nodeModel);
+        }
+
+        private bool Equals(NodeModel other)
+        {
+            return Position == other.Position;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_neighbours, Position, Chip);
+        }
+
+        #endregion
     }
 }

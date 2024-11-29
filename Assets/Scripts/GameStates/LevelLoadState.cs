@@ -15,7 +15,7 @@ namespace GameStates
     public class LevelLoadState : IState
     {
         private readonly ILevelSettingsProvider _levelSettingsProvider;
-        private readonly GameSettings _gameSettings;
+        private readonly IGameSettings _gameSettings;
         private readonly GraphService _graphService;
         private readonly IAsyncPublisher _publisher;
 
@@ -23,7 +23,7 @@ namespace GameStates
 
         public LevelLoadState(
             ILevelSettingsProvider levelSettingsProvider,
-            GameSettings gameSettings,
+            IGameSettings gameSettings,
             GraphService graphService,
             IAsyncPublisher publisher)
         {
