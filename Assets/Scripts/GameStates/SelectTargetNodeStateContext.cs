@@ -4,7 +4,7 @@ namespace GameStates
 {
     public struct SelectTargetNodeStateContext
     {
-        public NodeModel StartNode { get; private set; }
+        public NodeModel StartNode { get; }
         
         public SelectTargetNodeStateContext(NodeModel startNode)
         {

@@ -4,9 +4,9 @@ namespace GameStates
 {
     public struct ChipMovingStateContext
     {
-        public NodeModel StartNode { get; private set; }
-        public NodeModel TargetNode { get; private set; }
-        
+        public NodeModel StartNode { get; }
+        public NodeModel TargetNode { get; }
+
         public ChipMovingStateContext(NodeModel startNode, NodeModel targetNode)
         {
             StartNode = startNode;
