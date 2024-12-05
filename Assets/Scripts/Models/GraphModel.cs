@@ -4,7 +4,7 @@ namespace Models
 {
     public class GraphModel
     {
-        public IReadOnlyList<NodeModel> Nodes { get; }
+        public virtual IReadOnlyList<NodeModel> Nodes { get; }
 
         public GraphModel(IReadOnlyList<NodeModel> nodes)
         {
@@ -35,7 +35,7 @@ namespace Models
 
         public override int GetHashCode()
         {
-            return (Nodes != null ? Nodes.GetHashCode() : 0);
+            return Nodes != null ? Nodes.GetHashCode() : 0;
         }
 
         #endregion

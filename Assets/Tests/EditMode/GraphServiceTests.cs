@@ -3,53 +3,49 @@ using NUnit.Framework;
 using Services;
 using Settings;
 using Tests.SharedTestUtilities;
-using Utils;
 
-namespace Tests.EditModeTests
+namespace Tests.EditMode
 {
     public class GraphServiceTests
     {
-        private ILevelSettingsProvider _levelSettingsProvider;
-        private IGameSettings _gameSettings;
+        private TestGraphModel _testGraphModel;
+        private ILevelSettings _levelSettings;
+        private TestGameSettings _gameSettings;
         private GraphService _graphService;
 
         [SetUp]
         public void SetUp()
         {
             // Arrange
-            var parser = new LevelSettingsParser();
-            var userProgressController = new UserProgressController();
-            _levelSettingsProvider = new LevelSettingsProvider(parser, userProgressController);
-            _levelSettingsProvider.LoadConfigs();
-
+            // Creating Test Graph Model
+            _testGraphModel = new TestGraphModel(null);
+            // Creating Test Level Settings
+            _levelSettings = new TestLevelSettings();
+            // Creating Test Game Settings
             _gameSettings = new TestGameSettings();
 
+            // Creating Graph Service
             var graphFactory = new GraphFactory();
             var graphComparer = new GraphComparer();
             _graphService = new GraphService(graphFactory, graphComparer);
         }
 
         [Test]
-        public void CreateGraphs_WithSameSettings()
+        public void CreateGraph_WithSameSettings_ReturnsCorrectResult()
         {
             // Act
-            var levelSettings = _levelSettingsProvider.GetCurrentLevel();
-            var startGraph = _graphService.CreateStartGraph(levelSettings, _gameSettings);
-            var targetGraph = _graphService.CreateTargetGraph(levelSettings, _gameSettings);
-
+            var targetGraphModel = _graphService.CreateStartGraph(_levelSettings, _gameSettings);
+            
             // Assert
-            Assert.AreEqual(startGraph, targetGraph);
+            Assert.AreEqual(_testGraphModel, targetGraphModel);
         }
         
         [Test]
-        public void CompareGraphs_WithSameSettings()
+        public void CompareGraphs_WithSameSettings_ReturnsTrue()
         {
             // Act
-            var levelSettings = _levelSettingsProvider.GetCurrentLevel();
-            var startGraph = _graphService.CreateStartGraph(levelSettings, _gameSettings);
-            var targetGraph = _graphService.CreateStartGraph(levelSettings, _gameSettings);
-
-            var areGraphsEqual = _graphService.CompareGraphs(startGraph, targetGraph);
+            var targetGraphModel = _graphService.CreateStartGraph(_levelSettings, _gameSettings);
+            var areGraphsEqual = _graphService.CompareGraphs(_testGraphModel, targetGraphModel);
 
             // Assert
             Assert.AreEqual(areGraphsEqual, true);
