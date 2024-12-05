@@ -5,8 +5,6 @@ namespace Services
 {
     public class PathFinderService
     {
-        private readonly GraphService _graphService;
-        
         private readonly Queue<NodeModel> _nodesToVisit = new();
         private readonly HashSet<NodeModel> _visitedNodes = new();
         
@@ -14,11 +12,6 @@ namespace Services
         private readonly Dictionary<NodeModel, NodeModel> _previousNodes = new();
         private readonly List<NodeModel> _unvisitedNodes = new();
         private readonly Stack<NodeModel> _route = new();
-
-        public PathFinderService(GraphService graphService)
-        {
-            _graphService = graphService;
-        }
 
         public IEnumerable<NodeModel> FindReachableNodes(NodeModel startNode)
         {
@@ -50,10 +43,9 @@ namespace Services
             return _visitedNodes;
         }
 
-        public Stack<NodeModel> FindRoute(NodeModel startNode, NodeModel targetNode)
+        public Stack<NodeModel> FindRoute(GraphModel graphModel, NodeModel startNode, NodeModel targetNode)
         {
-            var startGraph = _graphService.GetStartGraph();
-            var nodes = startGraph.Nodes;
+            var nodes = graphModel.Nodes;
 
             ClearPreviousRouteCalculation(nodes);
 
@@ -65,7 +57,7 @@ namespace Services
 
                 _unvisitedNodes.Remove(currentNode);
 
-                if (currentNode == targetNode)
+                if (Equals(currentNode, targetNode))
                 {
                     break;
                 }

@@ -40,7 +40,8 @@ namespace GameStates
             var startNode = context.StartNode;
             var targetNode = context.TargetNode;
 
-            var route = _pathFinderService.FindRoute(startNode, targetNode);
+            var startGraph = _graphService.GetStartGraph();
+            var route = _pathFinderService.FindRoute(startGraph, startNode, targetNode);
 
             var currentChip = startNode.Chip;
             await _publisher.PublishAsync(new MoveChipEvent(currentChip, route));
