@@ -15,12 +15,7 @@ namespace Settings
         {
             _parser = parser;
             _userProgressController = userProgressController;
-        }
-
-        public void LoadConfigs()
-        {
-            var files = Directory.GetFiles(GlobalConstants.LEVELS_CONFIGS_PATH);
-            LevelsSettings = _parser.ParseLevelsFromTextFiles(files);
+            LoadConfigs();
         }
 
         public ILevelSettings GetCurrentLevel()
@@ -34,6 +29,12 @@ namespace Settings
             currentLevelIndex %= LevelsSettings.Count;
             
             return LevelsSettings[currentLevelIndex];
+        }
+
+        private void LoadConfigs()
+        {
+            var files = Directory.GetFiles(GlobalConstants.LEVELS_CONFIGS_PATH);
+            LevelsSettings = _parser.ParseLevelsFromTextFiles(files);
         }
     }
 }

@@ -55,7 +55,6 @@ namespace Tests.PlayMode.LifeTimeScope
 
         private void RegisterGameStateMachine(IContainerBuilder builder)
         {
-            builder.Register<BootstrapState>(Lifetime.Singleton);
             builder.Register<LevelLoadState>(Lifetime.Singleton);
             builder.Register<SelectStartNodeState>(Lifetime.Singleton);
             builder.Register<SelectTargetNodeState>(Lifetime.Singleton);

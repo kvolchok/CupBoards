@@ -13,7 +13,7 @@ public class GameController : IStartable, IDisposable
 
     public async void Start()
     {
-        await _stateMachine.Enter<BootstrapState>();
+        await _stateMachine.Enter<LevelLoadState>();
     }
 
     public void Dispose()

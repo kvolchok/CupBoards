@@ -31,7 +31,7 @@ namespace Tests.SharedTestUtilities
 
         public async void Start()
         {
-            await _stateMachine.Enter<BootstrapState>();
+            await _stateMachine.Enter<LevelLoadState>();
         }
 
         public void SelectStartNode()
