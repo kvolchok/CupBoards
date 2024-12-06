@@ -1,11 +1,12 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Events;
 using Models;
 using Services;
 using StateMachine;
 using UniTaskPubSub;
+using UnityEngine.Pool;
 
 namespace GameStates
 {
@@ -21,9 +22,9 @@ namespace GameStates
         private readonly AsyncMessageBus _messageBus;
 
         private StateMachine.StateMachine _stateMachine;
-        private IDisposable _subscription;
         private NodeModel _startNode;
-        private NodeModel[] _reachableNodes;
+        private HashSet<NodeModel> _reachableNodes;
+        private IDisposable _subscription;
 
         public SelectTargetNodeState(PathFinderService pathFinderService, AsyncMessageBus messageBus)
         {
@@ -35,26 +36,29 @@ namespace GameStates
         {
             _stateMachine = stateMachine;
         }
-        
+
         public async UniTask Enter(SelectTargetNodeStateContext context)
         {
             _subscription = _messageBus.Subscribe<NodeSelectedEvent>(OnNodeSelected);
-            
-            _startNode = context.StartNode;
-            await _messageBus.PublishAsync(new TurnOnHighlightEvent(_startNode.Chip));
 
-            _reachableNodes = _pathFinderService.FindReachableNodes(_startNode).ToArray();
-            await _messageBus.PublishAsync(new TurnOnHighlightEvent(_reachableNodes));
+            _startNode = context.StartNode;
+            ListPool<IHighlightable>.Get(out var highlightableElements);
+            highlightableElements.Add(_startNode.Chip);
+
+            _reachableNodes = _pathFinderService.FindReachableNodes(_startNode);
+            highlightableElements.AddRange(_reachableNodes);
+            await _messageBus.PublishAsync(new TurnOnHighlightEvent(highlightableElements));
+            ListPool<IHighlightable>.Release(highlightableElements);
         }
 
         private async UniTask OnNodeSelected(NodeSelectedEvent eventData)
         {
             await _messageBus.PublishAsync(new TurnOffHighlightsEvent());
-            
+
             var targetNode = eventData.NodeModel;
             var isReachableNode = _reachableNodes.Contains(targetNode);
 
-            if (targetNode == _startNode)
+            if (Equals(targetNode, _startNode))
             {
                 await _stateMachine.Enter<SelectStartNodeState>();
             }
@@ -73,14 +77,13 @@ namespace GameStates
             else
             {
                 await _stateMachine.Enter<ChipMovingState, ChipMovingStateContext>(
-                    new ChipMovingStateContext(_startNode, targetNode));    
+                    new ChipMovingStateContext(_startNode, targetNode));
             }
         }
 
         public UniTask Exit()
         {
             _subscription?.Dispose();
-            
             return UniTask.CompletedTask;
         }
     }

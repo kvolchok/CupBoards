@@ -42,7 +42,8 @@ namespace Factories
             }
         }
 
-        private void CreateChips(List<int> chipsInNodes, Color[] colors, List<NodeModel> nodes)
+        private void CreateChips(IReadOnlyList<int> chipsInNodes, IReadOnlyList<Color> colors,
+            IReadOnlyList<NodeModel> nodes)
         {
             for (var chipIndex = 0; chipIndex < chipsInNodes.Count; chipIndex++)
             {

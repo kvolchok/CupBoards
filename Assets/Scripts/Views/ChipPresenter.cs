@@ -28,7 +28,7 @@ namespace Views
         {
             var currentChip = eventData.CurrentChip;
 
-            if (currentChip != _model)
+            if (!Equals(currentChip, _model))
             {
                 return;
             }

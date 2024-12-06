@@ -53,7 +53,6 @@ namespace GameStates
         public UniTask Exit()
         {
             _subscription?.Dispose();
-            
             return UniTask.CompletedTask;
         }
     }

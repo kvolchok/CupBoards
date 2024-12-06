@@ -7,17 +7,17 @@ namespace Services
     {
         private readonly Queue<NodeModel> _nodesToVisit = new();
         private readonly HashSet<NodeModel> _visitedNodes = new();
-        
+
         private readonly Dictionary<NodeModel, int> _distancesFromStartNode = new();
         private readonly Dictionary<NodeModel, NodeModel> _previousNodes = new();
         private readonly List<NodeModel> _unvisitedNodes = new();
         private readonly Stack<NodeModel> _route = new();
 
-        public IEnumerable<NodeModel> FindReachableNodes(NodeModel startNode)
+        public HashSet<NodeModel> FindReachableNodes(NodeModel startNode)
         {
             _nodesToVisit.Clear();
             _visitedNodes.Clear();
-            
+
             _nodesToVisit.Enqueue(startNode);
 
             while (_nodesToVisit.Count > 0)
@@ -33,13 +33,13 @@ namespace Services
                     {
                         continue;
                     }
-                    
+
                     _nodesToVisit.Enqueue(neighbour);
                 }
             }
 
             _visitedNodes.Remove(startNode);
-            
+
             return _visitedNodes;
         }
 
@@ -64,11 +64,11 @@ namespace Services
 
                 FindAllRoutesFrom(currentNode);
             }
-            
+
             return GetRoute(targetNode);
         }
 
-        private void ClearPreviousRouteCalculation(IReadOnlyList<NodeModel> nodes)
+        private void ClearPreviousRouteCalculation(IEnumerable<NodeModel> nodes)
         {
             _distancesFromStartNode.Clear();
             _previousNodes.Clear();
@@ -82,7 +82,7 @@ namespace Services
                 _unvisitedNodes.Add(node);
             }
         }
-        
+
         private NodeModel FindNodeWithMinDistance()
         {
             var minDistance = int.MaxValue;
@@ -99,7 +99,7 @@ namespace Services
 
             return minNode;
         }
-        
+
         private void FindAllRoutesFrom(NodeModel currentNode)
         {
             var neighbours = currentNode.Neighbours;
@@ -114,7 +114,7 @@ namespace Services
                 }
             }
         }
-        
+
         private Stack<NodeModel> GetRoute(NodeModel targetNode)
         {
             var currentNode = targetNode;

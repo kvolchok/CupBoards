@@ -1,12 +1,13 @@
+using System.Collections.Generic;
 using Models;
 
 namespace Events
 {
     public struct TurnOnHighlightEvent
     {
-        public IHighlightable[] Models { get; }
+        public List<IHighlightable> Models { get; }
 
-        public TurnOnHighlightEvent(params IHighlightable[] models)
+        public TurnOnHighlightEvent(List<IHighlightable> models)
         {
             Models = models;
         }
