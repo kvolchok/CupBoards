@@ -9,7 +9,7 @@ namespace Services
         private readonly GraphFactory _graphFactory;
         private readonly GraphComparer _graphComparer;
 
-        protected GraphModel StartGraph;
+        private GraphModel _startGraph;
         private GraphModel _targetGraph;
 
         public GraphService(GraphFactory graphFactory, GraphComparer graphComparer)
@@ -20,13 +20,13 @@ namespace Services
 
         public GraphModel CreateStartGraph(ILevelSettings levelSettings, IGameSettings gameSettings)
         {
-            StartGraph = _graphFactory.CreateGraph(
+            _startGraph = _graphFactory.CreateGraph(
                 levelSettings.NodesPositions,
                 levelSettings.Connections,
                 levelSettings.StartChipsPositions,
                 gameSettings.Colors);
 
-            return StartGraph;
+            return _startGraph;
         }
 
         public GraphModel CreateTargetGraph(ILevelSettings levelSettings, IGameSettings gameSettings)
@@ -40,11 +40,11 @@ namespace Services
             return _targetGraph;
         }
 
-        public GraphModel GetStartGraph() => StartGraph;
+        public GraphModel GetStartGraph() => _startGraph;
 
         public bool CompareGraphs()
         {
-            return CompareGraphs(StartGraph, _targetGraph);
+            return CompareGraphs(_startGraph, _targetGraph);
         }
         
         public bool CompareGraphs(GraphModel startGraph, GraphModel targetGraph)

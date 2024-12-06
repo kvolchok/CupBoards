@@ -39,10 +39,7 @@ namespace Tests.PlayMode.LifeTimeScope
             builder.Register<GraphPresenterFactory>(Lifetime.Singleton);
             builder.Register<GraphElementsFactory>(Lifetime.Singleton);
 
-            builder.Register<TestGraphService>(Lifetime.Singleton)
-                .As<GraphService>()
-                .AsSelf();
-
+            builder.Register<GraphService>(Lifetime.Singleton);
             builder.Register<GraphFactory>(Lifetime.Singleton);
             builder.Register<GraphComparer>(Lifetime.Singleton);
 

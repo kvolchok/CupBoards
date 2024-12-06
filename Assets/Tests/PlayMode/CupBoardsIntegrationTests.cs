@@ -35,18 +35,22 @@ namespace Tests.PlayMode
 
         [UnityTest]
         [Category("LongRunning")]
-        [Timeout(1000 * 60 * 60 * 24)]
         public IEnumerator Game_With100NodeSelections_WorksWithoutAnyExceptions()
         {
             var gameController = _resolver.Resolve<TestGameController>();
             Assert.IsNotNull(gameController, "Could not resolve YourType from VContainer.");
 
             gameController.Start();
+            yield return new WaitForSeconds(3f);
 
             for (var i = 0; i < 100; i++)
             {
-                gameController.SelectNode();
+                gameController.SelectStartNode();
                 yield return new WaitForSeconds(1f);
+                
+                gameController.SelectTargetNode();
+                yield return new WaitForSeconds(1f);
+                
                 Debug.Log($"Move: {i}");
             }
 
