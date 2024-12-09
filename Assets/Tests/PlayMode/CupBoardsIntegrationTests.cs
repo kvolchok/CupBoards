@@ -45,7 +45,7 @@ namespace Tests.PlayMode
 
             for (var i = 0; i < 100; i++)
             {
-                gameController.SelectStartNode();
+                gameController.SelectStartChipWithPossibleMoves();
                 yield return new WaitForSeconds(1f);
                 
                 gameController.SelectTargetNode();

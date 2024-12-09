@@ -18,7 +18,9 @@ namespace Tests.SharedTestUtilities
         private readonly GraphService _graphService;
         private readonly PathFinderService _pathFinderService;
         private readonly IAsyncPublisher _publisher;
-        private NodeModel _randomNodeModel;
+
+        private NodeModel _startRandomNodeModel;
+        private HashSet<NodeModel> _reachableNodes;
 
         public TestGameController(GameStateMachine stateMachine, GraphService graphService,
             PathFinderService pathFinderService, IAsyncPublisher publisher)
@@ -34,31 +36,38 @@ namespace Tests.SharedTestUtilities
             await _stateMachine.Enter<LevelLoadState>();
         }
 
-        public void SelectStartNode()
+        public void SelectStartChipWithPossibleMoves()
         {
-            ListPool<NodeModel>.Get(out var nodeModels);
-            nodeModels = _graphService.GetStartGraph().Nodes.ToList();
-            _randomNodeModel = GetRandomNodeModel(nodeModels);
-            ListPool<NodeModel>.Release(nodeModels);
-            _publisher.Publish(new NodeSelectedEvent(_randomNodeModel));
+            var nodeModels = _graphService.GetStartGraph().Nodes;
+            
+            _startRandomNodeModel = GetRandomNodeModel(nodeModels);
+            _reachableNodes = _pathFinderService.FindReachableNodes(_startRandomNodeModel);
+
+            while (_startRandomNodeModel.Chip == null || _reachableNodes.Count == 0)
+            {
+                _startRandomNodeModel = GetRandomNodeModel(nodeModels);
+                _reachableNodes = _pathFinderService.FindReachableNodes(_startRandomNodeModel);
+            }
+
+            _publisher.Publish(new NodeSelectedEvent(_startRandomNodeModel));
         }
 
         public void SelectTargetNode()
         {
-            ListPool<NodeModel>.Get(out var reachableNodes);
-            reachableNodes = _pathFinderService.FindReachableNodes(_randomNodeModel).ToList();
-            if (reachableNodes.Count == 0)
+            ListPool<NodeModel>.Get(out var reachableNodesList);
+            reachableNodesList.AddRange(_reachableNodes);
+
+            var randomNodeModel = GetRandomNodeModel(reachableNodesList);
+            while (Equals(_startRandomNodeModel, randomNodeModel))
             {
-                _publisher.Publish(new NodeSelectedEvent(_randomNodeModel));
-                return;
+                randomNodeModel = GetRandomNodeModel(reachableNodesList);
             }
 
-            _randomNodeModel = GetRandomNodeModel(reachableNodes);
-            ListPool<NodeModel>.Release(reachableNodes);
-            _publisher.Publish(new NodeSelectedEvent(_randomNodeModel));
+            ListPool<NodeModel>.Release(reachableNodesList);
+            _publisher.Publish(new NodeSelectedEvent(randomNodeModel));
         }
 
-        private NodeModel GetRandomNodeModel(List<NodeModel> nodes)
+        private NodeModel GetRandomNodeModel(IReadOnlyList<NodeModel> nodes)
         {
             var randomNodeIndex = Random.Range(0, nodes.Count);
             return nodes[randomNodeIndex];
