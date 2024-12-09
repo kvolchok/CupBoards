@@ -6,13 +6,12 @@ namespace Views
 {
     public class ChipView : HighlightableView
     {
-        [SerializeField]
-        private float _movingDuration;
+        [SerializeField] private float _movingDuration;
 
         public void Initialize(Vector3 position, Color color)
         {
             transform.localPosition = position;
-            Sprite.color = color; 
+            Sprite.color = color;
         }
 
         public override void ToggleHighlight(bool isActive)

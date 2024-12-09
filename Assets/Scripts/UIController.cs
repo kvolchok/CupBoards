@@ -18,9 +18,7 @@ public class UIController : IStartable, IDisposable
     private GameOverPresenter _gameOverPresenter;
     private CompositeDisposable _subscriptions;
 
-    public UIController(
-        GraphPresenterFactory graphPresenterFactory,
-        GameOverPresenterFactory gameOverPresenterFactory,
+    public UIController(GraphPresenterFactory graphPresenterFactory, GameOverPresenterFactory gameOverPresenterFactory,
         IAsyncSubscriber subscriber)
     {
         _graphPresenterFactory = graphPresenterFactory;
@@ -35,7 +33,7 @@ public class UIController : IStartable, IDisposable
             _subscriber.Subscribe<ShowGraphEvent>(ShowGraph),
             _subscriber.Subscribe<GameOverEvent>(ShowGameOverScreen)
         };
-        
+
         _gameOverPresenter = _gameOverPresenterFactory.Create();
     }
 

@@ -17,7 +17,7 @@ namespace Views
             _gameOverOverScreen.RestartLevel.onClick.AddListener(OnRestartLevelButtonClicked);
             _gameOverOverScreen.NextLevel.onClick.AddListener(OnNextLevelButtonClicked);
         }
-        
+
         public void Show()
         {
             _gameOverOverScreen.gameObject.SetActive(true);
@@ -26,17 +26,17 @@ namespace Views
         private async void OnRestartLevelButtonClicked()
         {
             _gameOverOverScreen.gameObject.SetActive(false);
-            
-            await _messageBus.PublishAsync(new ButtonClickedEvent(isNextLevelButtonClicked:false));
+
+            await _messageBus.PublishAsync(new ButtonClickedEvent(false));
         }
-        
+
         private async void OnNextLevelButtonClicked()
         {
             _gameOverOverScreen.gameObject.SetActive(false);
-            
-            await _messageBus.PublishAsync(new ButtonClickedEvent(isNextLevelButtonClicked:true));
+
+            await _messageBus.PublishAsync(new ButtonClickedEvent(true));
         }
-        
+
         public void Dispose()
         {
             _gameOverOverScreen.RestartLevel.onClick.RemoveAllListeners();

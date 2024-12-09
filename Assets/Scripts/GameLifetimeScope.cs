@@ -11,10 +11,8 @@ using Views;
 
 public class GameLifetimeScope : LifetimeScope
 {
-    [SerializeField]
-    private GameSettings _gameSettings;
-    [SerializeField]
-    private GameOverScreen _gameOverScreen;
+    [SerializeField] private GameSettings _gameSettings;
+    [SerializeField] private GameOverScreen _gameOverScreen;
 
     protected override void Configure(IContainerBuilder builder)
     {

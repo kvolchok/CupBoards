@@ -5,14 +5,14 @@ using UnityEngine;
 namespace Factories
 {
     public class GraphFactory
-    { 
+    {
         public GraphModel CreateGraph(List<Vector2Int> nodesPositions, List<Vector2Int> connections,
             List<int> chipsInNodes, Color[] colors)
         {
             var nodes = new List<NodeModel>(nodesPositions.Count);
 
             CreateNodes(nodesPositions, nodes);
-        
+
             SetNeighbours(connections, nodes);
 
             CreateChips(chipsInNodes, colors, nodes);

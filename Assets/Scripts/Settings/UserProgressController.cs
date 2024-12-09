@@ -10,12 +10,12 @@ namespace Settings
         {
             return PlayerPrefs.HasKey(LEVEL_KEY);
         }
-        
+
         public int LoadCurrentLevelIndex()
         {
             return PlayerPrefs.GetInt(LEVEL_KEY);
         }
-        
+
         public void SaveCurrentLevelIndex(int level)
         {
             PlayerPrefs.SetInt(LEVEL_KEY, level);

@@ -15,7 +15,7 @@ namespace Factories
         {
             _startGraphRoot = gameSettings.StartGraphRoot;
             _targetGraphRoot = gameSettings.TargetGraphRoot;
-            
+
             _graphElementsFactory = graphElementsFactory;
         }
 
@@ -23,7 +23,7 @@ namespace Factories
         {
             return new GraphPresenter(graphModel, _startGraphRoot, _graphElementsFactory);
         }
-        
+
         public GraphPresenter CreateTargetPresenter(GraphModel graphModel)
         {
             return new GraphPresenter(graphModel, _targetGraphRoot, _graphElementsFactory);

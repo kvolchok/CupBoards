@@ -46,7 +46,7 @@ namespace Services
         {
             return CompareGraphs(_startGraph, _targetGraph);
         }
-        
+
         public bool CompareGraphs(GraphModel startGraph, GraphModel targetGraph)
         {
             return _graphComparer.Compare(startGraph, targetGraph);

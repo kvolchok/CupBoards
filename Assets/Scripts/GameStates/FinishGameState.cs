@@ -46,14 +46,14 @@ namespace GameStates
                 currentLevelIndex++;
                 _userProgressController.SaveCurrentLevelIndex(currentLevelIndex);
             }
-            
+
             await _stateMachine.Enter<LevelLoadState>();
         }
 
         public UniTask Exit()
         {
             _subscription?.Dispose();
-            
+
             return UniTask.CompletedTask;
         }
     }

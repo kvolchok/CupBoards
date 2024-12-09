@@ -8,7 +8,7 @@ namespace Services
         {
             var startGraphNodes = startGraph.Nodes;
             var targetGraphNodes = targetGraph.Nodes;
-            
+
             for (var i = 0; i < startGraphNodes.Count; i++)
             {
                 var firstChip = startGraphNodes[i].Chip;
@@ -18,12 +18,12 @@ namespace Services
                 {
                     continue;
                 }
-                
+
                 if (firstChip == null || secondChip == null)
                 {
                     return false;
                 }
-                
+
                 if (firstChip.Id != targetGraphNodes[i].Chip.Id)
                 {
                     return false;

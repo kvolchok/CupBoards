@@ -7,7 +7,7 @@ namespace Views
     public class NodePresenter : HighlightablePresenter
     {
         public NodeView NodeView { get; }
-        
+
         private readonly NodeModel _nodeModel;
 
         public NodePresenter(NodeModel nodeModel, NodeView nodeView, AsyncMessageBus messageBus, bool isInteractable)
@@ -15,24 +15,24 @@ namespace Views
         {
             _nodeModel = nodeModel;
             NodeView = nodeView;
-            
+
             if (!isInteractable)
             {
                 return;
             }
-            
+
             NodeView.NodeSelected += OnNodeSelected;
         }
 
         private async void OnNodeSelected()
         {
-            await _messageBus.PublishAsync(new NodeSelectedEvent(_nodeModel));
+            await MessageBus.PublishAsync(new NodeSelectedEvent(_nodeModel));
         }
 
         public override void Dispose()
         {
             base.Dispose();
-            
+
             NodeView.NodeSelected -= OnNodeSelected;
         }
     }

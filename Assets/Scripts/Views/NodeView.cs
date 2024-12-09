@@ -6,7 +6,7 @@ namespace Views
     public class NodeView : HighlightableView
     {
         public event Action NodeSelected;
-        
+
         public void Initialize(Vector3 position)
         {
             transform.localPosition = position;

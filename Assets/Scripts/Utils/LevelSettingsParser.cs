@@ -40,7 +40,7 @@ namespace Utils
 
             var levelSettings = new LevelSettings(
                 nodesPositions, connections, startChipsPositions, targetChipsPositions);
-        
+
             return levelSettings;
         }
 
@@ -48,11 +48,11 @@ namespace Utils
         {
             return Convert.ToInt32(streamReader.ReadLine());
         }
-    
+
         private List<Vector2Int> ParsePairs(StreamReader streamReader)
         {
             var list = new List<Vector2Int>();
-        
+
             var count = Convert.ToInt32(streamReader.ReadLine());
             for (var i = 0; i < count; i++)
             {

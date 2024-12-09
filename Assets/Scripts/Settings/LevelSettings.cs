@@ -9,7 +9,7 @@ namespace Settings
         public List<Vector2Int> Connections { get; }
         public List<int> StartChipsPositions { get; }
         public List<int> TargetChipsPositions { get; }
-    
+
         public LevelSettings(
             List<Vector2Int> nodesPositions,
             List<Vector2Int> connections,

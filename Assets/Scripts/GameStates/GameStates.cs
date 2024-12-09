@@ -12,7 +12,7 @@ namespace GameStates
             _chipMovingState,
             _finishGameState
         };
-        
+
         private readonly LevelLoadState _levelLoadState;
         private readonly SelectStartNodeState _selectStartNodeState;
         private readonly SelectTargetNodeState _selectTargetNodeState;

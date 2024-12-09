@@ -16,12 +16,11 @@ namespace Views
 
         private readonly List<EdgeView> _edges = new();
         private readonly HashSet<NodeView> _renderedEdgesFromView = new();
-        
+
         public GraphPresenter(GraphModel graphModel, GameObject graphRoot, GraphElementsFactory graphElementsFactory)
         {
             _model = graphModel;
             _root = graphRoot;
-            
             _graphElementsFactory = graphElementsFactory;
         }
 
@@ -36,26 +35,24 @@ namespace Views
             }
 
             _edges.Clear();
-
             _renderedEdgesFromView.Clear();
         }
 
         public void ShowGraph(bool isInteractable)
         {
             ShowNodesAndChips(_model, isInteractable);
-
             ShowEdges(_model);
         }
 
         private void DestroyViews<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
             where TValue : HighlightablePresenter
         {
-            foreach (var (_, presenter) in dictionary)
+            foreach (var presenter in dictionary.Values)
             {
                 Object.Destroy(presenter.View.gameObject);
                 presenter.Dispose();
             }
- 
+
             dictionary.Clear();
         }
 
@@ -90,7 +87,7 @@ namespace Views
                 {
                     var neighbourNodePresenter = _nodePresenterByModel[neighbourModel];
                     var neighbourView = neighbourNodePresenter.NodeView;
-                    
+
                     if (_renderedEdgesFromView.Contains(neighbourView))
                     {
                         continue;

@@ -11,22 +11,19 @@ namespace Views
     public abstract class HighlightablePresenter : IDisposable
     {
         public HighlightableView View { get; }
-        
-        protected readonly IHighlightable _model;
-        protected readonly AsyncMessageBus _messageBus;
-        
+
+        protected readonly IHighlightable Model;
+        protected readonly AsyncMessageBus MessageBus;
+
         private readonly CompositeDisposable _subscriptions;
 
-        protected HighlightablePresenter(
-            IHighlightable model,
-            HighlightableView view,
-            AsyncMessageBus messageBus,
+        protected HighlightablePresenter(IHighlightable model, HighlightableView view, AsyncMessageBus messageBus,
             bool isInteractable)
         {
-            _model = model;
+            Model = model;
             View = view;
-            _messageBus = messageBus;
-            
+            MessageBus = messageBus;
+
             if (!isInteractable)
             {
                 return;
@@ -34,27 +31,27 @@ namespace Views
 
             _subscriptions = new CompositeDisposable
             {
-                _messageBus.Subscribe<TurnOnHighlightEvent>(OnTurnOnHighlight),
-                _messageBus.Subscribe<TurnOffHighlightsEvent>(OnTurnOffHighlights)
+                MessageBus.Subscribe<TurnOnHighlightEvent>(OnTurnOnHighlight),
+                MessageBus.Subscribe<TurnOffHighlightsEvent>(OnTurnOffHighlights)
             };
         }
-        
+
         private UniTask OnTurnOnHighlight(TurnOnHighlightEvent eventData)
         {
             var models = eventData.Models;
 
-            if (models.Contains(_model))
+            if (models.Contains(Model))
             {
                 View.ToggleHighlight(true);
             }
 
             return UniTask.CompletedTask;
         }
-        
+
         private UniTask OnTurnOffHighlights(TurnOffHighlightsEvent eventData)
         {
             View.ToggleHighlight(false);
-            
+
             return UniTask.CompletedTask;
         }
 

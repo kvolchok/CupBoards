@@ -35,11 +35,11 @@ namespace Tests.EditMode
         {
             // Act
             var targetGraphModel = _graphService.CreateStartGraph(_levelSettings, _gameSettings);
-            
+
             // Assert
             Assert.AreEqual(_testGraphModel, targetGraphModel);
         }
-        
+
         [Test]
         public void CompareGraphs_WithSameSettings_ReturnsTrue()
         {

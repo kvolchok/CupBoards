@@ -22,14 +22,14 @@ namespace StateMachine
             var newState = await ChangeState<TState>();
             await newState.Enter();
         }
-        
+
         public async UniTask Enter<TState, TStateContext>(TStateContext context)
             where TState : class, IStateWithContext<TStateContext>
         {
             var newState = await ChangeState<TState>();
             await newState.Enter(context);
         }
-    
+
         private void RegisterState(IExitableState state)
         {
             state.Initialize(this);

@@ -20,9 +20,7 @@ namespace GameStates
 
         private StateMachine.StateMachine _stateMachine;
 
-        public ChipMovingState(
-            PathFinderService pathFinderService,
-            GraphService graphService,
+        public ChipMovingState(PathFinderService pathFinderService, GraphService graphService,
             IAsyncPublisher publisher)
         {
             _pathFinderService = pathFinderService;
@@ -45,10 +43,10 @@ namespace GameStates
 
             var currentChip = startNode.Chip;
             await _publisher.PublishAsync(new MoveChipEvent(currentChip, route));
-            
+
             startNode.SetChip(null);
             targetNode.SetChip(currentChip);
-            
+
             var areGraphsEqual = _graphService.CompareGraphs();
             if (areGraphsEqual)
             {

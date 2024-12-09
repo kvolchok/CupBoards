@@ -7,7 +7,7 @@ namespace Settings
     public class LevelSettingsProvider : ILevelSettingsProvider
     {
         public List<ILevelSettings> LevelsSettings { get; private set; }
-        
+
         private readonly LevelSettingsParser _parser;
         private readonly UserProgressController _userProgressController;
 
@@ -24,10 +24,10 @@ namespace Settings
             {
                 return LevelsSettings[0];
             }
-            
+
             var currentLevelIndex = _userProgressController.LoadCurrentLevelIndex();
             currentLevelIndex %= LevelsSettings.Count;
-            
+
             return LevelsSettings[currentLevelIndex];
         }
 

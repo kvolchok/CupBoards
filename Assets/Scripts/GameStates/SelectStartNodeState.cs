@@ -38,7 +38,7 @@ namespace GameStates
         private async UniTask OnNodeSelected(NodeSelectedEvent eventData)
         {
             var selectedNode = eventData.NodeModel;
-            
+
             if (selectedNode.Chip == null)
             {
                 await _stateMachine.Enter<SelectStartNodeState>();
@@ -53,6 +53,7 @@ namespace GameStates
         public UniTask Exit()
         {
             _subscription?.Dispose();
+
             return UniTask.CompletedTask;
         }
     }
