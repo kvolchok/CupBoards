@@ -25,16 +25,21 @@ namespace Views
 
         private async void OnRestartLevelButtonClicked()
         {
-            _gameOverOverScreen.gameObject.SetActive(false);
+            Hide();
 
             await _messageBus.PublishAsync(new ButtonClickedEvent(false));
         }
 
         private async void OnNextLevelButtonClicked()
         {
-            _gameOverOverScreen.gameObject.SetActive(false);
+            Hide();
 
             await _messageBus.PublishAsync(new ButtonClickedEvent(true));
+        }
+
+        private void Hide()
+        {
+            _gameOverOverScreen.gameObject.SetActive(false);
         }
 
         public void Dispose()

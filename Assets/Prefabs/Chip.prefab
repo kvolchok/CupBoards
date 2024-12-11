@@ -100,4 +100,4 @@ MonoBehaviour:
   <Sprite>k__BackingField: {fileID: 2345839164729627276}
   <Highlighted>k__BackingField: {r: 1, g: 1, b: 1, a: 0.5882353}
   <UnHighlighted>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
-  _movingDuration: 0.5
+  _movingSpeed: 2

@@ -6,7 +6,7 @@ namespace Views
 {
     public class ChipView : HighlightableView
     {
-        [SerializeField] private float _movingDuration;
+        [SerializeField] private float _movingSpeed;
 
         public void Initialize(Vector3 position, Color color)
         {
@@ -22,9 +22,12 @@ namespace Views
             Sprite.color = spriteColor;
         }
 
-        public async UniTask ChangePosition(Vector3 position)
+        public async UniTask ChangePosition(Vector3 newPosition)
         {
-            await transform.DOMove(position, _movingDuration).ToUniTask();
+            var distance = Vector3.Distance(transform.position, newPosition);
+            var movingDuration = distance / _movingSpeed;
+            
+            await transform.DOMove(newPosition, movingDuration).ToUniTask();
         }
     }
 }

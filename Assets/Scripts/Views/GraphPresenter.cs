@@ -11,11 +11,9 @@ namespace Views
         private readonly GameObject _root;
         private readonly GraphElementsFactory _graphElementsFactory;
 
-        private readonly Dictionary<NodeModel, NodePresenter> _nodePresenterByModel = new();
-        private readonly Dictionary<ChipModel, ChipPresenter> _chipPresenterByModel = new();
-
+        private readonly Dictionary<IHighlightable, HighlightablePresenter> _presenterByModel = new();
         private readonly List<EdgeView> _edges = new();
-        private readonly HashSet<NodeView> _renderedEdgesFromView = new();
+        private readonly HashSet<HighlightableView> _renderedEdgesFromView = new();
 
         public GraphPresenter(GraphModel graphModel, GameObject graphRoot, GraphElementsFactory graphElementsFactory)
         {
@@ -26,8 +24,7 @@ namespace Views
 
         public void ClearView()
         {
-            DestroyViews(_nodePresenterByModel);
-            DestroyViews(_chipPresenterByModel);
+            DestroyViews(_presenterByModel);
 
             foreach (var edgeView in _edges)
             {
@@ -44,13 +41,12 @@ namespace Views
             ShowEdges(_model);
         }
 
-        private void DestroyViews<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
-            where TValue : HighlightablePresenter
+        private void DestroyViews(Dictionary<IHighlightable, HighlightablePresenter> dictionary)
         {
             foreach (var presenter in dictionary.Values)
             {
-                Object.Destroy(presenter.View.gameObject);
                 presenter.Dispose();
+                presenter.ClearView();
             }
 
             dictionary.Clear();
@@ -62,7 +58,7 @@ namespace Views
             {
                 var nodePresenter = _graphElementsFactory.CreateNodePresenter(
                     _root.transform, nodeModel, isInteractable);
-                _nodePresenterByModel[nodeModel] = nodePresenter;
+                _presenterByModel[nodeModel] = nodePresenter;
 
                 var chipModel = nodeModel.Chip;
                 if (chipModel == null)
@@ -72,7 +68,7 @@ namespace Views
 
                 var chipPresenter = _graphElementsFactory.CreateChipPresenter(
                     _root.transform, nodeModel.Position, chipModel, isInteractable);
-                _chipPresenterByModel[chipModel] = chipPresenter;
+                _presenterByModel[chipModel] = chipPresenter;
             }
         }
 
@@ -80,13 +76,13 @@ namespace Views
         {
             foreach (var nodeModel in graphModel.Nodes)
             {
-                var currentNodePresenter = _nodePresenterByModel[nodeModel];
-                var currentNodeView = currentNodePresenter.NodeView;
+                var currentNodePresenter = _presenterByModel[nodeModel];
+                var currentNodeView = currentNodePresenter.View;
 
                 foreach (var neighbourModel in nodeModel.Neighbours)
                 {
-                    var neighbourNodePresenter = _nodePresenterByModel[neighbourModel];
-                    var neighbourView = neighbourNodePresenter.NodeView;
+                    var neighbourNodePresenter = _presenterByModel[neighbourModel];
+                    var neighbourView = neighbourNodePresenter.View;
 
                     if (_renderedEdgesFromView.Contains(neighbourView))
                     {

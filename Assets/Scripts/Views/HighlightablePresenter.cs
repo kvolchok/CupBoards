@@ -1,17 +1,17 @@
 using System;
-using System.Linq;
 using Cysharp.Threading.Tasks;
 using Events;
 using Extensions;
 using Models;
 using UniTaskPubSub;
+using Object = UnityEngine.Object;
 
 namespace Views
 {
     public abstract class HighlightablePresenter : IDisposable
     {
         public HighlightableView View { get; }
-
+        
         protected readonly IHighlightable Model;
         protected readonly AsyncMessageBus MessageBus;
 
@@ -20,8 +20,8 @@ namespace Views
         protected HighlightablePresenter(IHighlightable model, HighlightableView view, AsyncMessageBus messageBus,
             bool isInteractable)
         {
-            Model = model;
             View = view;
+            Model = model;
             MessageBus = messageBus;
 
             if (!isInteractable)
@@ -34,6 +34,11 @@ namespace Views
                 MessageBus.Subscribe<TurnOnHighlightEvent>(OnTurnOnHighlight),
                 MessageBus.Subscribe<TurnOffHighlightsEvent>(OnTurnOffHighlights)
             };
+        }
+
+        public void ClearView()
+        {
+            Object.Destroy(View.gameObject);
         }
 
         private UniTask OnTurnOnHighlight(TurnOnHighlightEvent eventData)

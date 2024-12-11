@@ -6,7 +6,7 @@ namespace Views
     {
         [SerializeField] private LineRenderer _line;
 
-        public void Show(NodeView from, NodeView to)
+        public void Show(HighlightableView from, HighlightableView to)
         {
             _line.positionCount = 2;
             _line.widthMultiplier *= transform.parent.localScale.x;
