@@ -14,10 +14,8 @@ namespace Tests.PlayMode.LifeTimeScope
 {
     public class IntegrationTestsLifetimeScope : LifetimeScope
     {
-        [SerializeField]
-        private GameSettings _gameSettings;
-        [SerializeField]
-        private GameOverScreen _gameOverScreen;
+        [SerializeField] private GameSettings _gameSettings;
+        [SerializeField] private GameOverScreen _gameOverScreen;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -29,7 +27,6 @@ namespace Tests.PlayMode.LifeTimeScope
                 .AsImplementedInterfaces()
                 .AsSelf();
 
-            builder.Register<GameOverPresenterFactory>(Lifetime.Singleton);
             builder.Register<GameOverPresenter>(Lifetime.Singleton);
 
             builder.Register<LevelSettingsParser>(Lifetime.Singleton);

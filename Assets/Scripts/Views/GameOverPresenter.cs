@@ -7,12 +7,12 @@ namespace Views
     public class GameOverPresenter : IDisposable
     {
         private readonly GameOverScreen _gameOverOverScreen;
-        private readonly AsyncMessageBus _messageBus;
+        private readonly IAsyncPublisher _publisher;
 
-        public GameOverPresenter(GameOverScreen gameOverOverScreen, AsyncMessageBus messageBus)
+        public GameOverPresenter(GameOverScreen gameOverOverScreen, IAsyncPublisher publisher)
         {
             _gameOverOverScreen = gameOverOverScreen;
-            _messageBus = messageBus;
+            _publisher = publisher;
 
             _gameOverOverScreen.RestartLevel.onClick.AddListener(OnRestartLevelButtonClicked);
             _gameOverOverScreen.NextLevel.onClick.AddListener(OnNextLevelButtonClicked);
@@ -27,14 +27,14 @@ namespace Views
         {
             Hide();
 
-            await _messageBus.PublishAsync(new ButtonClickedEvent(false));
+            await _publisher.PublishAsync(new ButtonClickedEvent(false));
         }
 
         private async void OnNextLevelButtonClicked()
         {
             Hide();
 
-            await _messageBus.PublishAsync(new ButtonClickedEvent(true));
+            await _publisher.PublishAsync(new ButtonClickedEvent(true));
         }
 
         private void Hide()

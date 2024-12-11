@@ -24,7 +24,6 @@ public class GameLifetimeScope : LifetimeScope
             .AsImplementedInterfaces()
             .AsSelf();
 
-        builder.Register<GameOverPresenterFactory>(Lifetime.Singleton);
         builder.Register<GameOverPresenter>(Lifetime.Singleton);
 
         builder.Register<LevelSettingsParser>(Lifetime.Singleton);

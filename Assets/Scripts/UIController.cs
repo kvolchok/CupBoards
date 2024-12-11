@@ -10,31 +10,31 @@ using Views;
 public class UIController : IStartable, IDisposable
 {
     private readonly GraphPresenterFactory _graphPresenterFactory;
-    private readonly GameOverPresenterFactory _gameOverPresenterFactory;
-    private readonly IAsyncSubscriber _subscriber;
+    private readonly GameOverScreen _gameOverScreen;
+    private readonly AsyncMessageBus _messageBus;
 
     private GraphPresenter _startGraphPresenter;
     private GraphPresenter _targetGraphPresenter;
     private GameOverPresenter _gameOverPresenter;
     private CompositeDisposable _subscriptions;
 
-    public UIController(GraphPresenterFactory graphPresenterFactory, GameOverPresenterFactory gameOverPresenterFactory,
-        IAsyncSubscriber subscriber)
+    public UIController(GraphPresenterFactory graphPresenterFactory, GameOverScreen gameOverScreen,
+        AsyncMessageBus messageBus)
     {
         _graphPresenterFactory = graphPresenterFactory;
-        _gameOverPresenterFactory = gameOverPresenterFactory;
-        _subscriber = subscriber;
+        _gameOverScreen = gameOverScreen;
+        _messageBus = messageBus;
     }
 
     public void Start()
     {
         _subscriptions = new CompositeDisposable
         {
-            _subscriber.Subscribe<ShowGraphEvent>(ShowGraph),
-            _subscriber.Subscribe<GameOverEvent>(ShowGameOverScreen)
+            _messageBus.Subscribe<ShowGraphEvent>(ShowGraph),
+            _messageBus.Subscribe<GameOverEvent>(ShowGameOverScreen)
         };
 
-        _gameOverPresenter = _gameOverPresenterFactory.Create();
+        _gameOverPresenter = new GameOverPresenter(_gameOverScreen, _messageBus);
     }
 
     private UniTask ShowGraph(ShowGraphEvent eventData)
