@@ -5,7 +5,8 @@ namespace Tests.SharedTestUtilities
 {
     public class TestGameSettings : IGameSettings
     {
-        public Color[] Colors { get; } = 
+        public GraphViewPrefabs GraphViewPrefabs { get; } = new();
+        public Color[] Colors { get; } =
         {
             new(255, 127, 0),
             new(255, 255, 0),
@@ -16,5 +17,8 @@ namespace Tests.SharedTestUtilities
             new(200, 70, 200),
             new(70, 200, 200)
         };
+        
+        public GameObject StartGraphRoot { get; } = new();
+        public GameObject TargetGraphRoot { get; } = new();
     }
 }

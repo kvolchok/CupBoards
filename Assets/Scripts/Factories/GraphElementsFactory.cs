@@ -17,12 +17,12 @@ namespace Factories
         private readonly IObjectResolver _container;
         private readonly AsyncMessageBus _messageBus;
 
-        public GraphElementsFactory(GraphViewPrefabs graphViewPrefabs, IObjectResolver container,
+        public GraphElementsFactory(IGameSettings gameSettings, IObjectResolver container,
             AsyncMessageBus messageBus)
         {
-            _nodePrefab = graphViewPrefabs.NodePrefab;
-            _chipPrefab = graphViewPrefabs.ChipPrefab;
-            _edgePrefab = graphViewPrefabs.EdgePrefab;
+            _nodePrefab = gameSettings.GraphViewPrefabs.NodePrefab;
+            _chipPrefab = gameSettings.GraphViewPrefabs.ChipPrefab;
+            _edgePrefab = gameSettings.GraphViewPrefabs.EdgePrefab;
 
             _container = container;
             _messageBus = messageBus;

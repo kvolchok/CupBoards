@@ -44,7 +44,6 @@ namespace Tests.PlayMode.LifeTimeScope
             builder.Register<TestGameController>(Lifetime.Singleton);
 
             builder.RegisterInstance(_gameSettings).AsImplementedInterfaces();
-            builder.RegisterInstance(_gameSettings.GraphViewPrefabs);
             builder.RegisterInstance(_gameOverScreen);
 
             builder.RegisterEntryPoint<UIController>();
