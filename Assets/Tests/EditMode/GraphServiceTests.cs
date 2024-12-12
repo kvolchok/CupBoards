@@ -34,21 +34,21 @@ namespace Tests.EditMode
         public void CreateGraph_WithSameSettings_ReturnsCorrectResult()
         {
             // Act
-            var targetGraphModel = _graphService.CreateStartGraph(_levelSettings, _gameSettings);
+            var targetGraphModel = _graphService.CreateGraph(_levelSettings, _gameSettings, isStartGraph: true);
 
             // Assert
-            Assert.AreEqual(_testGraphModel, targetGraphModel);
+            Assert.AreEqual(targetGraphModel, _testGraphModel);
         }
 
         [Test]
         public void CompareGraphs_WithSameSettings_ReturnsTrue()
         {
             // Act
-            var targetGraphModel = _graphService.CreateStartGraph(_levelSettings, _gameSettings);
+            var targetGraphModel = _graphService.CreateGraph(_levelSettings, _gameSettings, isStartGraph: true);
             var areGraphsEqual = _graphService.CompareGraphs(_testGraphModel, targetGraphModel);
 
             // Assert
-            Assert.AreEqual(areGraphsEqual, true);
+            Assert.AreEqual(true, areGraphsEqual);
         }
     }
 }

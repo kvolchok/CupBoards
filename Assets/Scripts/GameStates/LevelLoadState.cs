@@ -42,8 +42,8 @@ namespace GameStates
         {
             var levelSettings = _levelSettingsProvider.GetCurrentLevel();
 
-            var startGraph = _graphService.CreateStartGraph(levelSettings, _gameSettings);
-            var targetGraph = _graphService.CreateTargetGraph(levelSettings, _gameSettings);
+            var startGraph = _graphService.CreateGraph(levelSettings, _gameSettings, isStartGraph: true);
+            var targetGraph = _graphService.CreateGraph(levelSettings, _gameSettings, isStartGraph: false);
 
             await _publisher.PublishAsync(new ShowGraphEvent(startGraph));
             await _publisher.PublishAsync(new ShowGraphEvent(targetGraph, isInteractable: false));

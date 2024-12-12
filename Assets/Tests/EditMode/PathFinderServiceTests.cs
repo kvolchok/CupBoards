@@ -1,12 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Factories;
 using Models;
 using NUnit.Framework;
 using Services;
-using Settings;
 using Tests.SharedTestUtilities;
-using Utils;
 
 namespace Tests.EditMode
 {

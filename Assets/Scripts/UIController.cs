@@ -43,18 +43,19 @@ public class UIController : IStartable, IDisposable
     private UniTask ShowGraph(ShowGraphEvent eventData)
     {
         var isGraphInteractable = eventData.IsInteractable;
+        var graphRoot = isGraphInteractable ? _gameSettings.StartGraphRoot : _gameSettings.TargetGraphRoot;
         if (isGraphInteractable)
         {
             _startGraphPresenter?.ClearView();
             _startGraphPresenter =
-                _graphPresenterFactory.CreateGraphPresenter(eventData.GraphModel, _gameSettings.StartGraphRoot);
+                _graphPresenterFactory.CreateGraphPresenter(eventData.GraphModel, graphRoot);
             _startGraphPresenter.ShowGraph(true);
         }
         else
         {
             _targetGraphPresenter?.ClearView();
             _targetGraphPresenter = 
-                _graphPresenterFactory.CreateGraphPresenter(eventData.GraphModel, _gameSettings.TargetGraphRoot);
+                _graphPresenterFactory.CreateGraphPresenter(eventData.GraphModel, graphRoot);
             _targetGraphPresenter.ShowGraph(false);
         }
 

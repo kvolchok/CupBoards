@@ -18,26 +18,24 @@ namespace Services
             _graphComparer = graphComparer;
         }
 
-        public GraphModel CreateStartGraph(ILevelSettings levelSettings, IGameSettings gameSettings)
+        public GraphModel CreateGraph(ILevelSettings levelSettings, IGameSettings gameSettings, bool isStartGraph)
         {
-            _startGraph = _graphFactory.CreateGraph(
-                levelSettings.NodesPositions,
-                levelSettings.Connections,
-                levelSettings.StartChipsPositions,
-                gameSettings.Colors);
+            var chipsPositions = isStartGraph ? 
+                levelSettings.StartChipsPositions : levelSettings.TargetChipsPositions;
+            
+            var graph = _graphFactory.CreateGraph(levelSettings.NodesPositions, levelSettings.Connections,
+                chipsPositions, gameSettings.Colors);
 
-            return _startGraph;
-        }
+            if (isStartGraph)
+            {
+                _startGraph = graph;
+            }
+            else
+            {
+                _targetGraph = graph;
+            }
 
-        public GraphModel CreateTargetGraph(ILevelSettings levelSettings, IGameSettings gameSettings)
-        {
-            _targetGraph = _graphFactory.CreateGraph(
-                levelSettings.NodesPositions,
-                levelSettings.Connections,
-                levelSettings.TargetChipsPositions,
-                gameSettings.Colors);
-
-            return _targetGraph;
+            return graph;
         }
 
         public GraphModel GetStartGraph() => _startGraph;
