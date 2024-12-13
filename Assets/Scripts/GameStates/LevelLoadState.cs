@@ -9,8 +9,8 @@ namespace GameStates
 {
     /// <summary>
     /// Level Load State:
-    /// - Load current level
-    /// - Create start and target graphs
+    /// 1. Load current level settings
+    /// 2. Create start and target graphs
     /// </summary>
     public class LevelLoadState : IState
     {

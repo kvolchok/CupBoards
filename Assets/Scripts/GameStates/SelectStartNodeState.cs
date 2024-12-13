@@ -8,7 +8,8 @@ namespace GameStates
 {
     /// <summary>
     /// Select Start Node State:
-    /// - Select start node that it's chip will be moved
+    /// 1. Select start node that it's chip will be moved
+    /// Case:
     /// - If there is no chip in node, select another node
     /// </summary>
     public class SelectStartNodeState : IState

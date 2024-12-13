@@ -9,8 +9,8 @@ namespace GameStates
 {
     /// <summary>
     /// Finish Game State:
-    /// - Show GameOver Screen
-    /// - Select of reloading the level or loading the next one
+    /// 1. Show GameOver Screen
+    /// 2. Select of reloading the level or loading the next one
     /// </summary>
     public class FinishGameState : IState
     {

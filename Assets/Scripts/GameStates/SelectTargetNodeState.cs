@@ -12,9 +12,11 @@ namespace GameStates
 {
     /// <summary>
     /// Select Target Node State:
-    /// - Select target node where start chip will be moved
-    /// - If there is no chip in target node or start chip is target chip, select another start node
-    /// - If target node is unreachable, select another target node
+    /// 1. Select target node where start chip will be moved
+    /// Cases;
+    /// - If target node is start node, select another start node
+    /// - If target node is unreachable and it has no chip in it, select another start node
+    /// - If target node is unreachable and it has chip in it, select another target node
     /// </summary>
     public class SelectTargetNodeState : IStateWithContext<SelectTargetNodeStateContext>
     {
