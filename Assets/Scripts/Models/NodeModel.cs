@@ -37,6 +37,16 @@ namespace Models
 
         private bool Equals(NodeModel other)
         {
+            if (other == null || GetType() != other.GetType())
+            {
+                return false;
+            }
+            
+            if (_neighbours.Count != other.Neighbours.Count)
+            {
+                return false;
+            }
+            
             for (var i = 0; i < _neighbours.Count; i++)
             {
                 var currentNodeModel = _neighbours[i];
@@ -53,6 +63,16 @@ namespace Models
         public override int GetHashCode()
         {
             return HashCode.Combine(_neighbours, Position, Chip);
+        }
+        
+        public static bool operator ==(NodeModel current, NodeModel other)
+        {
+            return Equals(current, other);
+        }
+
+        public static bool operator !=(NodeModel current, NodeModel other)
+        {
+            return !Equals(current, other);
         }
 
         #endregion
