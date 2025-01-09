@@ -53,7 +53,7 @@ If needed, you can quickly and easily modify an existing state (adding some audi
 
 You might also find the following classes interesting:
 
-- **GameController** - The first (core) **entry-point** in this project
-- **GraphService** - Manages creating and comparing graphs
-- **PathFinderService** - Responsible for finding reachable nodes and routes to them
-- **UIController** - The second (UI) **entry-point** in this project
+- **GameController** - the first (core) **entry-point** in this project
+- **GraphService** - manages creating and comparing graphs
+- **PathFinderService** - responsible for finding reachable nodes and routes to them
+- **UIController** - the second (UI) **entry-point** in this project
